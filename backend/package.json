@@ -1,0 +1,34 @@
+{
+  "name": "ai-hiring-screening-workbench-backend",
+  "version": "1.0.0",
+  "description": "Emerging Role Hiring Standard & Screening Omission Review Workbench - Backend Service",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "eval": "tsx src/eval/eval-runner.ts",
+    "eval:live": "tsx src/eval/eval-runner.ts --live",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@fastify/sensible": "^5.5.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^16.4.7",
+    "fastify": "^4.28.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT"
+}

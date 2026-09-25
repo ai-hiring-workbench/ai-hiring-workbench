@@ -1,0 +1,23 @@
+{
+  "department": "AI Application Incubation / Customer Support Experience",
+  "targetRole": "Junior / Intern AI Application Product Manager",
+  "businessProblem": "Customer support receives 20,000 inquiries monthly; LLM copilot answers have a 25% hallucination rate; customer reps distrust bot suggestions; lack dedicated personnel to curate badcases, iterate prompt templates, and measure accuracy.",
+  "targetUsers": [
+    "Internal customer service representatives",
+    "External consumers seeking order and return support"
+  ],
+  "deliverables": [
+    "Benchmark evaluation dataset containing at least 300 verified QA pairs",
+    "5 optimized and structured prompt templates across core inquiry types",
+    "Weekly answer accuracy and rep adoption rate tracking dashboard"
+  ],
+  "constraints": [
+    "No model pre-training or PyTorch/CUDA algorithm code required",
+    "Must possess proficient Excel/JSON data cleaning and metric analysis skills",
+    "Per-query LLM API cost must not exceed $0.01; latency under 2 seconds"
+  ],
+  "openQuestions": [
+    "What is the exact target threshold for rep adoption rate after 3 months?",
+    "Does the team prefer few-shot in-context learning or fine-tuning later?"
+  ]
+}

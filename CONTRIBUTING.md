@@ -1,37 +1,59 @@
-# 团队协作规范
+# 团队协作规范 | Team Collaboration Guidelines
 
-## 分支
+面向团队成员的开发流程、分支管理与提交规范。  
+*Development workflow, branch management, and PR guidelines for all contributors.*
 
-- 功能：`feat/<任务名>`
-- 修复：`fix/<问题名>`
-- 文档：`docs/<文档名>`
-- 数据与评测：`eval/<任务名>`
+---
 
-禁止在未评审的情况下直接向 `main` 推送实现代码。
+## 1. 分支规范 / Branching Strategy
 
-## 开始任务
+从最新的 `main` 分支拉取自己的任务分支，禁止直接向 `main` 推送未评审代码：  
+*Always branch off latest `main`. Pushing unreviewed code directly to `main` is strictly prohibited:*
 
-1. 建立或领取 Issue；
-2. 写清交付物、前置条件和验收标准；
-3. 从最新 `main` 创建分支；
-4. 只修改自己负责的模块；
-5. 若接口或字段发生变化，先通知上下游负责人。
+* **新功能 / Features:** `feat/<task-name>`
+* **问题修复 / Bug Fixes:** `fix/<issue-name>`
+* **文档更新 / Documentation:** `docs/<doc-name>`
+* **评测与数据 / Benchmark & Eval:** `eval/<task-name>`
 
-## Pull Request
+---
 
-PR 必须说明：
+## 2. 开发与验证流程 / Workflow & Verification
 
-- 解决什么问题；
-- 修改了哪些目录；
-- 如何验证；
-- 是否修改业务规则、字段或 Eval 口径；
-- 是否包含授权数据或需要额外配置。
+1. **领取任务 / Claim Issue:** 明确交付物与验收标准后再开始。  
+   *Clarify deliverables and acceptance criteria before coding.*
+2. **本地验证 / Local Verification:** 提交代码前，确保本地通过编译检查与测试：  
+   *Before opening a PR, ensure all checks pass:*
+   ```bash
+   cd backend
+   npm run build   # 验证 TypeScript 编译无报错 / Verify zero compile errors
+   npm test        # 运行自动化单元测试 / Run automated test suites
+   ```
+3. **接口变更对齐 / Sync API Changes:** 若涉及字段或路由变更，需提前更新 `docs/` 并通知前后端队友。  
+   *If modifying API schemas or routes, update docs and notify teammates beforehand.*
 
-代码检查命令由各模块负责人在初始化技术栈后补充，当前仓库不预设具体框架。
+---
 
-## 数据和结论边界
+## 3. Pull Request 提交要求 / PR Checklist
 
-- 不上传真实个人信息、原始简历、密钥或未经授权的企业资料；
-- Mock、单元测试和接口可运行不等于业务效果有效；
-- 正式 Eval 必须使用冻结标准、独立 Gold 和隔离的 holdout；
-- AI 输出不能直接替代用人经理的招聘决定。
+提交 PR 时需清晰说明以下内容：  
+*Every Pull Request description must clearly outline:*
+
+- [ ] **问题描述 / Problem:** 解决了什么具体需求或问题。  
+      *What problem does this PR solve?*
+- [ ] **改动目录 / Changes:** 修改了哪些核心目录与文件。  
+      *Which directories and files were modified?*
+- [ ] **验证结果 / Verification:** 本地测试输出与运行截图。  
+      *Proof of passing tests and local verification results.*
+- [ ] **无敏感信息 / Security Check:** 确认没有包含任何 API Key、真实个人简历或未授权资料。  
+      *Confirmed zero API keys, raw resumes, or private PII included.*
+
+---
+
+## 4. 数据与合规底线 / Data & Compliance Boundaries
+
+* **数据脱敏 / Privacy:** 严禁将真实姓名、电话、邮箱上传至 Git 历史；示例数据仅使用合成或完全脱敏材料。  
+  *Never commit real candidate names, phones, emails, or raw resumes.*
+* **密钥安全 / Secret Safety:** API Key 仅保存在本地 `.env`，已被 `.gitignore` 保护，严禁入库。  
+  *API keys must remain strictly in local `.env` and never be committed.*
+* **人机边界 / Human in the Loop:** AI 输出仅作为辅助复核建议，用人经理与 HR 拥有最终裁决权。  
+  *AI provides review assistance only; humans hold final hiring authority.*

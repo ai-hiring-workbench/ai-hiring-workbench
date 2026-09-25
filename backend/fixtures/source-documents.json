@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SRC_001",
+    "type": "INTERNAL_ROUGH_JD",
+    "title": "Engineering Lead Rough Hiring Notes",
+    "publisher": "Customer Support Tech Lead",
+    "date": "2026-09-01",
+    "rawText": "Hiring an intern for AI customer support. Needs to understand LLMs, ideally has used ChatGPT or Claude. Main job is analyzing badcase responses from our chatbot and tweaking system prompts to make it smarter. Needs strong communication skills to coordinate with engineers and frontline reps. Basic Python or strong Excel skills required. At least 4 days a week for 3+ months."
+  },
+  {
+    "id": "SRC_002",
+    "type": "INDUSTRY_BENCHMARK",
+    "title": "Top Tech AI Application PM Intern Profile",
+    "publisher": "Tech Enterprise Public Job Portal",
+    "date": "2026-08-15",
+    "rawText": "Role: AI Application Product Manager Intern. Responsibilities: 1. Deeply understand LLM capabilities and boundaries; design prompt architectures and tune generation quality. 2. Build multi-dimensional Model Evaluation datasets; define criteria for accuracy, relevance, and safety. 3. Collaborate with engineering on RAG knowledge chunking and retrieval optimization. 4. Track global generative AI advancements and open-source tooling. Requirements: 1. Bachelor's degree or above in CS, Information Systems, or HCI preferred. 2. Hands-on Prompt Engineering experience. 3. Basic data analysis skills (SQL/Python preferred)."
+  },
+  {
+    "id": "SRC_003",
+    "type": "TEAM_CONSTRAINTS",
+    "title": "Hiring Boundaries and Anti-Goals",
+    "publisher": "HRBP & AI Director",
+    "date": "2026-09-05",
+    "rawText": "1. Evaluate candidates on metric discipline and execution diligence. Disqualify candidates who only play with image generation toys without evaluation metrics. 2. Model fine-tuning is handled by dedicated algorithm engineers; PMs do not need deep CUDA or distributed training experience. 3. Resilience requirement: Must be able to methodically analyze badcases after dozens of prompt iteration failures, rather than guessing blindly."
+  }
+]

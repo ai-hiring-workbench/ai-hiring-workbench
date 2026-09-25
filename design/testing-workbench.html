@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新兴岗位招聘复核工作台 | Hiring Review Workbench</title>
+  
+  <!-- Modern Typography: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'PingFang SC', 'Hiragino Sans GB', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#2563EB',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#0f172a',
+            }
+          },
+          boxShadow: {
+            'card': '0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04)',
+            'elevated': '0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    body {
+      background-color: #f8fafc;
+    }
+
+    /* Amber pulse glow for resume line citations */
+    @keyframes amber-pulse-clean {
+      0%, 100% {
+        background-color: #fef3c7;
+        box-shadow: inset 0 0 0 1px #f59e0b;
+      }
+      50% {
+        background-color: #fde68a;
+        box-shadow: inset 0 0 0 1.5px #d97706;
+      }
+    }
+
+    .highlight-active {
+      animation: amber-pulse-clean 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      border-radius: 4px;
+      position: relative;
+    }
+    
+    .highlight-active::before {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: #d97706;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Evidence Badges */
+    .badge-supported {
+      background-color: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .badge-partial {
+      background-color: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+    .badge-insufficient {
+      background-color: #eef2ff;
+      color: #3730a3;
+      border: 1px solid #c7d2fe;
+    }
+    .badge-no-evidence {
+      background-color: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Keyboard navigation focus ring */
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid #2563EB !important;
+      outline-offset: 2px !important;
+    }
+
+    .kbd-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body class="text-slate-900 font-sans antialiased min-h-screen flex selection:bg-sky-100 selection:text-sky-900">
+
+  <!-- ================= MODERN ENTERPRISE SIDEBAR ================= -->
+  <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 h-screen sticky top-0 z-30 select-none">
+    
+    <!-- Sidebar Header / Branding -->
+    <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+          <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="font-bold text-slate-900 text-sm leading-tight tracking-tight" data-i18n="app_title">新兴岗位招聘复核</h2>
+          <div class="text-[10px] font-mono text-slate-400">Acme Hiring OS • v0.4</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Target Role Card -->
+    <div class="px-4 py-3 bg-slate-50/80 border-b border-slate-100">
+      <div class="text-[10px] font-mono text-slate-400 font-semibold uppercase tracking-wider mb-1" data-i18n="sidebar_active_role_label">当前复核岗位 (P0 Target)</div>
+      <div class="flex items-center space-x-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-xs font-bold text-slate-800" data-i18n="role_badge">AI 应用产品经理 (实习/初级)</span>
+      </div>
+    </div>
+
+    <!-- Streamlined Vertical Navigation Menu -->
+    <div class="flex-1 px-3 py-3 space-y-1 overflow-y-auto custom-scroll text-xs">
+      
+      <!-- HR Port Group -->
+      <div class="px-3 pb-1 text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider" data-i18n="nav_hr_group">
+        HR 复核工作台 (HR Port)
+      </div>
+
+      <!-- Nav Item 1: Standard Formulation -->
+      <button onclick="goToView('standard')" id="nav-btn-standard" class="sidebar-nav-btn cursor-pointer w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 transition-colors text-left group bg-slate-100 font-bold text-brand-600">
+        <div class="flex items-center space-x-2.5">
+          <span class="w-5 h-5 rounded-md bg-white text-slate-600 group-hover:bg-slate-200 flex items-center justify-center font-mono text-[11px] font-bold border border-slate-200">1</span>
+          <span data-i18n="nav_standard">标准确认与冻结</span>
+        </div>
+        <span id="nav-badge-standard" class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-100 text-emerald-800">FROZEN</span>
+      </button>
+
+      <!-- Nav Item 2: Candidate Triage Queue -->
+      <button onclick="goToView('candidates')" id="nav-btn-candidates" class="sidebar-nav-btn cursor-pointer w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 transition-colors text-left group">
+        <div class="flex items-center space-x-2.5">
+          <span class="w-5 h-5 rounded-md bg-white text-slate-600 group-hover:bg-slate-200 flex items-center justify-center font-mono text-[11px] font-bold border border-slate-200">2</span>
+          <span data-i18n="nav_candidates">候选人分诊队列</span>
+        </div>
+        <span id="nav-badge-candidates" class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-amber-100 text-amber-800">1 找回</span>
+      </button>
+
+      <!-- Nav Item 3: Deep Split-Pane Line Review -->
+      <button onclick="goToView('split-review')" id="nav-btn-split-review" class="sidebar-nav-btn cursor-pointer w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 transition-colors text-left group">
+        <div class="flex items-center space-x-2.5">
+          <span class="w-5 h-5 rounded-md bg-white text-slate-600 group-hover:bg-slate-200 flex items-center justify-center font-mono text-[11px] font-bold border border-slate-200">3</span>
+          <span data-i18n="nav_split_review">简历双栏与行级证据</span>
+        </div>
+        <i data-lucide="split" class="w-3.5 h-3.5 text-slate-400"></i>
+      </button>
+
+      <!-- Student Port Group -->
+      <div class="pt-4 px-3 pb-1 text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider" data-i18n="nav_student_group">
+        候选人诊断 (Student Port)
+      </div>
+
+      <!-- Nav Item 4: Student Self-Assessment -->
+      <button onclick="goToView('student')" id="nav-btn-student" class="sidebar-nav-btn cursor-pointer w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 transition-colors text-left group">
+        <div class="flex items-center space-x-2.5">
+          <span class="w-5 h-5 rounded-md bg-white text-slate-600 group-hover:bg-slate-200 flex items-center justify-center font-mono text-[11px] font-bold border border-slate-200">
+            <i data-lucide="graduation-cap" class="w-3 h-3 text-sky-600"></i>
+          </span>
+          <span data-i18n="nav_student">学生端证据自诊断</span>
+        </div>
+        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-sky-100 text-sky-800" data-i18n="nav_student_badge">自检</span>
+      </button>
+
+    </div>
+
+    <!-- Sidebar Bottom: Demo Switch, Language, Backend API -->
+    <div class="p-3 border-t border-slate-200 space-y-2.5 bg-slate-50/50">
+      
+      <!-- Demo Data Toggle Switch Box (Controls Empty States vs Populated Benchmark) -->
+      <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-600"></i>
+            <span class="text-xs font-bold text-slate-800" data-i18n="toggle_demo_title">示范案例模式</span>
+          </div>
+          <button id="toggle-demo-switch" onclick="toggleDemoMode()" class="cursor-pointer relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors bg-brand-600 focus:outline-none" aria-label="Toggle Demo Mode">
+            <span id="demo-switch-thumb" class="inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform translate-x-4 shadow-sm"></span>
+          </button>
+        </div>
+        <p class="text-[10px] text-slate-500 mt-1 leading-tight" id="demo-subtext-label" data-i18n="demo_active_desc">
+          已载入 P0 示范案例 (4人批次)
+        </p>
+      </div>
+
+      <!-- Language Selector -->
+      <div class="flex items-center justify-between px-1">
+        <button id="lang-btn" onclick="toggleLanguage()" class="cursor-pointer text-xs font-medium text-slate-600 hover:text-slate-900 flex items-center space-x-1.5">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span id="lang-text">🇨🇳 中文 / 🇬🇧 EN</span>
+        </button>
+        <span class="kbd-chip">1-4 Quick</span>
+      </div>
+
+      <!-- Live Fastify API Connection Status -->
+      <div class="px-2 py-1.5 bg-white rounded-lg border border-slate-200 flex items-center justify-between text-[10px] font-mono">
+        <div class="flex items-center space-x-1.5">
+          <span id="api-status-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="api-status-text" class="text-slate-600">API: 127.0.0.1:3000</span>
+        </div>
+        <span class="text-slate-400">v1</span>
+      </div>
+
+    </div>
+
+  </aside>
+
+  <!-- ================= MAIN CONTENT WORKSPACE ================= -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto custom-scroll">
+
+    <!-- Top Workspace Header Bar (Clean: Only Where I Am) -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-20 px-8 py-3.5 flex items-center">
+      <h1 class="text-sm font-bold text-slate-900 tracking-tight" id="top-current-view-title" data-i18n="view_title_standard">
+        标准确认与冻结
+      </h1>
+    </header>
+
+    <!-- Workspace Main Body -->
+    <main class="flex-1 p-8 max-w-7xl w-full mx-auto space-y-6">
+
+      <!-- ================= VIEW 1: STANDARD FORMULATION (标准确认与冻结) ================= -->
+      <section id="view-standard" class="content-view space-y-6">
+        
+        <!-- Header Banner -->
+        <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2.5">
+              <span class="px-2 py-0.5 bg-slate-900 text-white rounded text-[11px] font-mono font-semibold">STAGE 01</span>
+              <h2 class="text-lg font-bold text-slate-900 tracking-tight" data-i18n="standard_heading">企业任务澄清与岗位规约冻结</h2>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[11px] font-mono font-semibold" data-i18n="standard_tag">SHA-256 锁定</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1.5 max-w-3xl leading-relaxed" data-i18n="standard_sub">
+              将业务部门真实痛点转化为可验证的标准规约。标准冻结后生成不可篡改哈希，所有候选人筛选均严格依此标准进行因果验证。
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-2.5 shrink-0">
+            <button onclick="toggleStandardFreeze()" class="cursor-pointer px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 shadow-sm">
+              <i data-lucide="lock" class="w-4 h-4 text-emerald-400"></i>
+              <span id="btn-freeze-text" data-i18n="btn_freeze_standard">重新计算并冻结标准</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty State Container (Shows when demo is off & no standard) -->
+        <div id="empty-standard" class="empty-state hidden bg-white rounded-xl border-2 border-dashed border-slate-300 p-12 text-center shadow-card space-y-4">
+          <div class="w-14 h-14 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+            <i data-lucide="file-spreadsheet" class="w-7 h-7 text-slate-400"></i>
+          </div>
+          <div class="max-w-md mx-auto">
+            <h3 class="text-base font-bold text-slate-900" data-i18n="empty_standard_title">尚未创建岗位标准 (No Standard Created)</h3>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed" data-i18n="empty_standard_copy">
+              从输入用人部门原始业务需求开始，或一键载入官方 P0 初级/实习 AI 应用产品经理基准规范。
+            </p>
+          </div>
+          <div class="flex items-center justify-center space-x-3 pt-2">
+            <button onclick="loadDemoStandard()" class="load-sample cursor-pointer px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center space-x-1.5">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span data-i18n="btn_load_p0_standard">⚡ 载入 P0 官方标准 (Load Benchmark)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Populated Standard View -->
+        <div id="populated-standard" class="space-y-6">
+          
+          <!-- 4 Rubric Criteria Matrix -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Criterion 1 -->
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <div class="flex items-center space-x-2">
+                  <span class="w-6 h-6 rounded bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center">R1</span>
+                  <h3 class="text-xs font-bold text-slate-900" data-i18n="rubric_r1_title">提示词工程与基准评测</h3>
+                </div>
+                <span class="text-xs font-mono font-bold text-brand-600">权重 30%</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed" data-i18n="rubric_r1_desc">
+                要求具备 Few-shot、COT 调优及结构化输出能力，能建立至少包含 50+ Case 的人工/自动化评测集，监控幻觉率与响应时延。
+              </p>
+              <div class="pt-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>绑定任务: T-01 智能客服评测</span>
+                <span class="text-emerald-600 font-semibold">必须项 (Hard Rule)</span>
+              </div>
+            </div>
+
+            <!-- Criterion 2 -->
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <div class="flex items-center space-x-2">
+                  <span class="w-6 h-6 rounded bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center">R2</span>
+                  <h3 class="text-xs font-bold text-slate-900" data-i18n="rubric_r2_title">业务场景拆解与边界定义</h3>
+                </div>
+                <span class="text-xs font-mono font-bold text-brand-600">权重 25%</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed" data-i18n="rubric_r2_desc">
+                具备将模糊业务流程分解为 Prompt 链或多步骤工作流（如 Dify/Coze）的能力，设计降级兜底方案与异常状态流转。
+              </p>
+              <div class="pt-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>绑定任务: T-02 工单分流工作流</span>
+                <span class="text-emerald-600 font-semibold">必须项 (Hard Rule)</span>
+              </div>
+            </div>
+
+            <!-- Criterion 3 -->
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <div class="flex items-center space-x-2">
+                  <span class="w-6 h-6 rounded bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center">R3</span>
+                  <h3 class="text-xs font-bold text-slate-900" data-i18n="rubric_r3_title">跨职能交付与模型能力边界理解</h3>
+                </div>
+                <span class="text-xs font-mono font-bold text-brand-600">权重 25%</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed" data-i18n="rubric_r3_desc">
+                深刻理解大模型上下文窗口、Token 成本控制与时延瓶颈，能与研发工程团队高效对齐 API 协议与落地指标。
+              </p>
+              <div class="pt-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>绑定任务: T-03 产研团队协同交付</span>
+                <span class="text-slate-600 font-semibold">评估项 (Evaluation)</span>
+              </div>
+            </div>
+
+            <!-- Criterion 4 -->
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <div class="flex items-center space-x-2">
+                  <span class="w-6 h-6 rounded bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center">R4</span>
+                  <h3 class="text-xs font-bold text-slate-900" data-i18n="rubric_r4_title">检索增强 (RAG) 与幻觉治理经验</h3>
+                </div>
+                <span class="text-xs font-mono font-bold text-brand-600">权重 20%</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed" data-i18n="rubric_r4_desc">
+                具备知识库分块策略、向量检索调优及防幻觉校验实践，确保输出内容具备可溯源证据。
+              </p>
+              <div class="pt-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>绑定任务: T-04 企业知识库上线</span>
+                <span class="text-slate-600 font-semibold">加分项 (Bonus)</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Standard Hash & Audit Verification Footer -->
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card flex items-center justify-between text-xs font-mono">
+            <div class="flex items-center space-x-3">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+              <span class="text-slate-600">FROZEN SPEC HASH: <strong class="text-slate-900">9f8a2c114b21e8d977ae382910cba7b122031f10b057ef12</strong></span>
+            </div>
+            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Rule R-08 Compliant</span>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= VIEW 2: CANDIDATE TRIAGE QUEUE (候选人分诊队列) ================= -->
+      <section id="view-candidates" class="content-view space-y-6 hidden">
+        
+        <!-- Header Banner -->
+        <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2.5">
+              <span class="px-2 py-0.5 bg-slate-900 text-white rounded text-[11px] font-mono font-semibold">STAGE 02</span>
+              <h2 class="text-lg font-bold text-slate-900 tracking-tight" data-i18n="triage_heading">候选人漏筛初筛复核队列 (Omission Triage Queue)</h2>
+              <span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[11px] font-mono font-semibold" data-i18n="triage_tag">4 类典型画像</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1.5 max-w-3xl leading-relaxed" data-i18n="triage_sub">
+              传统 ATS 关键词过滤常误杀非标岗位高潜人才，同时让堆砌 Buzzword 的应试简历虚高通过。本队列自动对比已冻结标准，执行漏筛打捞与防虚高预警。
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-2.5 shrink-0">
+            <button onclick="goToView('split-review')" class="cursor-pointer px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 shadow-sm">
+              <i data-lucide="split" class="w-4 h-4 text-sky-400"></i>
+              <span data-i18n="btn_open_deep_review">进入深度行级证据核验 →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card">
+            <div class="text-[10px] font-mono text-slate-400 font-semibold uppercase" data-i18n="kpi_total_cands">复核批次总人数</div>
+            <div class="text-xl font-bold text-slate-900 font-mono mt-1" id="stat-total-cands">4 位候选人</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">P0 测试基准批次</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card">
+            <div class="text-[10px] font-mono text-slate-400 font-semibold uppercase" data-i18n="kpi_rescued">成功打捞漏筛人才 (Rescued)</div>
+            <div class="text-xl font-bold text-emerald-600 font-mono mt-1" id="stat-rescued-count">1 位 (李四)</div>
+            <div class="text-[11px] text-emerald-600 mt-0.5">传统 ATS 曾将其拒绝</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card">
+            <div class="text-[10px] font-mono text-slate-400 font-semibold uppercase" data-i18n="kpi_flagged">防虚高预警 (Needs Evidence)</div>
+            <div class="text-xl font-bold text-amber-600 font-mono mt-1" id="stat-flagged-count">1 位 (王五)</div>
+            <div class="text-[11px] text-amber-600 mt-0.5">仅堆砌词汇，缺乏产出</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card">
+            <div class="text-[10px] font-mono text-slate-400 font-semibold uppercase" data-i18n="kpi_evidence_rule">证据量化原则 (Rule R-11)</div>
+            <div class="text-xs font-bold text-slate-800 font-mono mt-1">4 态离散证据分布</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">零虚假百分比打分</div>
+          </div>
+        </div>
+
+        <!-- Empty State Container -->
+        <div id="empty-candidates" class="empty-state hidden bg-white rounded-xl border-2 border-dashed border-slate-300 p-12 text-center shadow-card space-y-4">
+          <div class="w-14 h-14 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+            <i data-lucide="users" class="w-7 h-7 text-slate-400"></i>
+          </div>
+          <div class="max-w-md mx-auto">
+            <h3 class="text-base font-bold text-slate-900" data-i18n="empty_cands_title">候选人复核队列为空 (Candidate Queue Empty)</h3>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed" data-i18n="empty_cands_copy">
+              导入脱敏候选人简历批次，系统将自动执行漏筛打捞与防虚高复核。
+            </p>
+          </div>
+          <div class="flex items-center justify-center space-x-3 pt-2">
+            <button onclick="loadDemoCandidates()" class="load-sample cursor-pointer px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center space-x-1.5">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span data-i18n="btn_load_p0_cands">⚡ 载入 4 类典型候选人测试集</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Candidate Cards Grid -->
+        <div id="populated-candidates" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Candidate 1: Rescued Candidate (Li Si) -->
+          <div class="bg-white rounded-xl border-2 border-emerald-500/50 p-5 shadow-card space-y-4 relative overflow-hidden">
+            <div class="absolute top-0 right-0 px-3 py-1 bg-emerald-500 text-white text-[10px] font-mono font-bold rounded-bl-lg flex items-center space-x-1">
+              <i data-lucide="check-circle" class="w-3 h-3"></i>
+              <span data-i18n="card_rescued_tag">漏筛打捞 (PRIORITY RESCUE)</span>
+            </div>
+
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-bold text-sm text-slate-900">李四 (Li Si)</h3>
+                  <span class="text-xs font-mono text-slate-400">cand_p0_001</span>
+                </div>
+                <div class="text-xs text-slate-500 mt-0.5">原简历岗位: <strong class="text-slate-700">运营助理 (Operations Assistant)</strong></div>
+              </div>
+            </div>
+
+            <!-- Triage Conflict Analysis Box -->
+            <div class="bg-emerald-50/70 border border-emerald-200 rounded-lg p-3 text-xs space-y-1.5">
+              <div class="flex items-center justify-between text-emerald-900 font-semibold">
+                <span>传统 ATS 判定: <span class="line-through text-rose-600">已淘汰 (REJECTED)</span></span>
+                <span class="font-bold text-emerald-700">智能复核: 优先打捞</span>
+              </div>
+              <p class="text-[11px] text-emerald-800 leading-relaxed">
+                <strong>打捞因果链条:</strong> 传统过滤因“运营”头衔直接淘汰。但深度解析发现其自主用 Dify 搭建 RAG 客服系统，撰写 12 套 Few-shot 提示词模板并沉淀评测集，解决率提升 35%。
+              </p>
+            </div>
+
+            <!-- 4-State Evidence Distribution -->
+            <div class="flex items-center space-x-1.5 text-[11px]">
+              <span class="badge-supported px-2 py-0.5 rounded font-mono font-semibold">3 SUPPORTED</span>
+              <span class="badge-partial px-2 py-0.5 rounded font-mono font-semibold">1 PARTIAL</span>
+              <span class="badge-insufficient px-2 py-0.5 rounded font-mono font-semibold">0 INSUFFICIENT</span>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+              <span class="text-[11px] font-mono text-slate-400">已锚定 4 处行级证据</span>
+              <button onclick="inspectCandidateInSplitReview('cand_p0_001')" class="cursor-pointer text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center space-x-1">
+                <span data-i18n="btn_inspect_evidence">核查行级证据与改判 →</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Candidate 2: Buzzword Stuffer (Wang Wu) -->
+          <div class="bg-white rounded-xl border-2 border-amber-500/50 p-5 shadow-card space-y-4 relative overflow-hidden">
+            <div class="absolute top-0 right-0 px-3 py-1 bg-amber-500 text-white text-[10px] font-mono font-bold rounded-bl-lg flex items-center space-x-1">
+              <i data-lucide="alert-triangle" class="w-3 h-3"></i>
+              <span data-i18n="card_buzzword_tag">防虚高预警 (BUZZWORD ALERT)</span>
+            </div>
+
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-bold text-sm text-slate-900">王五 (Wang Wu)</h3>
+                  <span class="text-xs font-mono text-slate-400">cand_p0_002</span>
+                </div>
+                <div class="text-xs text-slate-500 mt-0.5">原简历岗位: <strong class="text-slate-700">AI 首席架构师 (Lead AI Architect)</strong></div>
+              </div>
+            </div>
+
+            <!-- Triage Conflict Analysis Box -->
+            <div class="bg-amber-50/70 border border-amber-200 rounded-lg p-3 text-xs space-y-1.5">
+              <div class="flex items-center justify-between text-amber-900 font-semibold">
+                <span>传统 ATS 判定: <span class="text-emerald-600 font-bold">高分通过 (PASSED)</span></span>
+                <span class="font-bold text-amber-700">智能复核: 待补充证据</span>
+              </div>
+              <p class="text-[11px] text-amber-800 leading-relaxed">
+                <strong>预警因果链条:</strong> 简历大肆堆砌“多智能体协同、千万级高并发、AGI 治理”，但经文本解析与行级匹配，未发现任何具体指标、评测集规模或代码交付记录。
+              </p>
+            </div>
+
+            <!-- 4-State Evidence Distribution -->
+            <div class="flex items-center space-x-1.5 text-[11px]">
+              <span class="badge-supported px-2 py-0.5 rounded font-mono font-semibold">0 SUPPORTED</span>
+              <span class="badge-partial px-2 py-0.5 rounded font-mono font-semibold">1 PARTIAL</span>
+              <span class="badge-insufficient px-2 py-0.5 rounded font-mono font-semibold">2 INSUFFICIENT</span>
+              <span class="badge-no-evidence px-2 py-0.5 rounded font-mono font-semibold">1 NO_EVIDENCE</span>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+              <span class="text-[11px] font-mono text-slate-400">触发 Rule R-06 防虚高</span>
+              <button onclick="inspectCandidateInSplitReview('cand_p0_002')" class="cursor-pointer text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center space-x-1">
+                <span data-i18n="btn_inspect_evidence">核查行级证据与改判 →</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Candidate 3: Standard Qualified (Zhang San) -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-bold text-sm text-slate-900">张三 (Zhang San)</h3>
+                  <span class="text-xs font-mono text-slate-400">cand_p0_003</span>
+                </div>
+                <div class="text-xs text-slate-500 mt-0.5">原简历岗位: <strong class="text-slate-700">产品实习生 (Product Intern)</strong></div>
+              </div>
+              <span class="px-2 py-0.5 bg-sky-100 text-sky-800 text-[10px] font-mono font-bold rounded">常规匹配 (STANDARD)</span>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs text-slate-600 leading-relaxed">
+              具备完整的大模型产品需求文档 (PRD) 撰写经历，参与上线内部问答助手，指标真实有效。
+            </div>
+
+            <div class="flex items-center space-x-1.5 text-[11px]">
+              <span class="badge-supported px-2 py-0.5 rounded font-mono font-semibold">2 SUPPORTED</span>
+              <span class="badge-partial px-2 py-0.5 rounded font-mono font-semibold">2 PARTIAL</span>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+              <span class="text-[11px] font-mono text-slate-400">两端结论一致</span>
+              <button onclick="inspectCandidateInSplitReview('cand_p0_003')" class="cursor-pointer text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center space-x-1">
+                <span>查看详情 →</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Candidate 4: Unqualified (Zhao Liu) -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-bold text-sm text-slate-900">赵六 (Zhao Liu)</h3>
+                  <span class="text-xs font-mono text-slate-400">cand_p0_004</span>
+                </div>
+                <div class="text-xs text-slate-500 mt-0.5">原简历岗位: <strong class="text-slate-700">平面设计师 (Graphic Designer)</strong></div>
+              </div>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-mono font-bold rounded">不予支持 (UNSUPPORTED)</span>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs text-slate-600 leading-relaxed">
+              仅使用 Midjourney 生成配图，无任何大语言模型产品规划、提示词调优或评测经验。
+            </div>
+
+            <div class="flex items-center space-x-1.5 text-[11px]">
+              <span class="badge-no-evidence px-2 py-0.5 rounded font-mono font-semibold">4 NO_EVIDENCE</span>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+              <span class="text-[11px] font-mono text-slate-400">空能力原则 (Rule R-03)</span>
+              <button onclick="inspectCandidateInSplitReview('cand_p0_004')" class="cursor-pointer text-xs font-semibold text-slate-500 hover:text-slate-700 flex items-center space-x-1">
+                <span>查看详情 →</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= VIEW 3: SPLIT-PANE DEEP EVIDENCE REVIEW (深度双栏行级证据) ================= -->
+      <section id="view-split-review" class="content-view space-y-6 hidden">
+        
+        <!-- Header Banner -->
+        <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2.5">
+              <span class="px-2 py-0.5 bg-slate-900 text-white rounded text-[11px] font-mono font-semibold">STAGE 03</span>
+              <h2 class="text-lg font-bold text-slate-900 tracking-tight" data-i18n="split_heading">深度双栏证据核验与改判工作台</h2>
+              <span class="px-2 py-0.5 bg-sky-50 text-sky-700 border border-sky-200 rounded text-[11px] font-mono font-semibold" data-i18n="split_tag">行级引用可穿透</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1.5 max-w-3xl leading-relaxed" data-i18n="split_sub">
+              左侧全文行号精确锚定，右侧严格呈现 4 态证据卡与原文逐字引用。点击右侧任意行号锚点，左侧原文立即联动琥珀色高亮。
+            </p>
+          </div>
+
+          <!-- Candidate Switcher Pill -->
+          <div class="flex items-center space-x-2 shrink-0">
+            <span class="text-xs text-slate-500 font-medium" data-i18n="label_switch_cand">切换候选人:</span>
+            <select id="split-candidate-selector" onchange="onSplitCandidateChange(this.value)" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:border-brand-600">
+              <option value="cand_p0_001">李四 (Li Si) - 漏筛打捞</option>
+              <option value="cand_p0_002">王五 (Wang Wu) - 防虚高预警</option>
+              <option value="cand_p0_003">张三 (Zhang San) - 常规合格</option>
+              <option value="cand_p0_004">赵六 (Zhao Liu) - 不予支持</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- The Interactive Dual-Pane Workstation -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[600px]">
+          
+          <!-- LEFT PANE: Resume Document with Line Numbers (5 Cols) -->
+          <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-card flex flex-col overflow-hidden">
+            
+            <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="file-text" class="w-4 h-4 text-sky-600"></i>
+                <h3 class="text-xs font-bold text-slate-900" id="resume-doc-title">李四_脱敏简历文本.pdf</h3>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400">OCR Grounded • 35 Lines</span>
+            </div>
+
+            <!-- Resume Lines Scroll Area -->
+            <div id="resume-lines-container" class="flex-1 p-4 font-mono text-xs overflow-y-auto max-h-[550px] custom-scroll space-y-1 bg-white">
+              <!-- Rendered by JS -->
+            </div>
+
+          </div>
+
+          <!-- RIGHT PANE: 4-State Evidence Cards & Adjudication (7 Cols) -->
+          <div class="lg:col-span-7 space-y-4">
+            
+            <!-- Candidate Summary & Verdict Bar -->
+            <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card flex items-center justify-between">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <span class="text-sm font-bold text-slate-900" id="detail-cand-name">李四 (Li Si)</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800" id="detail-verdict-pill">PRIORITY REVIEW (RESCUED)</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1" id="detail-cand-rationale">
+                  虽然职能头衔为运营助理，但在大模型提示词评测与业务工作流搭建方面具备高价值真实经验。
+                </p>
+              </div>
+            </div>
+
+            <!-- Evidence Cards List -->
+            <div id="evidence-cards-container" class="space-y-3">
+              <!-- Rendered by JS -->
+            </div>
+
+            <!-- HUMAN ADJUDICATION & OVERRIDE BOX (Enforcing Rule R-10) -->
+            <div class="bg-white rounded-xl border-2 border-slate-300 p-5 shadow-card space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <h4 class="text-xs font-bold text-slate-900 flex items-center space-x-2">
+                  <i data-lucide="user-check" class="w-4 h-4 text-brand-600"></i>
+                  <span data-i18n="adjudication_title">用人经理 / HR 最终裁决 (Human Adjudication)</span>
+                </h4>
+                <span class="text-[10px] font-mono text-slate-400">Rule R-10: 改判必留痕</span>
+              </div>
+
+              <div class="flex items-center space-x-3 text-xs">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="radio" name="adjudication_action" value="ADOPT" checked onchange="toggleOverrideInput(false)" class="text-brand-600 focus:ring-brand-500">
+                  <span class="font-bold text-slate-800" data-i18n="action_adopt">采纳智能复核建议 (打捞面试)</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="radio" name="adjudication_action" value="OVERRIDE" onchange="toggleOverrideInput(true)" class="text-rose-600 focus:ring-rose-500">
+                  <span class="font-bold text-rose-700" data-i18n="action_override">人工改判决定 (Override)</span>
+                </label>
+              </div>
+
+              <!-- Mandatory Override Justification Input -->
+              <div id="override-reason-box" class="hidden space-y-1.5 pt-1">
+                <label class="block text-[11px] font-semibold text-rose-700" data-i18n="override_label">
+                  请输入改判理由 (Mandatory Justification - Rule R-10):
+                </label>
+                <textarea id="override-reason-input" rows="2" placeholder="根据业务特定场景要求，说明改判事实依据与风险权衡..." class="w-full p-2.5 bg-rose-50/50 border border-rose-200 rounded-lg text-xs focus:outline-none focus:border-rose-500"></textarea>
+              </div>
+
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-[10px] font-mono text-slate-400">决策人: 张强 (用人经理) • 2026-09-25</span>
+                <button onclick="commitDecision()" class="cursor-pointer px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition shadow-sm">
+                  <span data-i18n="btn_commit_decision">确认并提交合规决议</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= VIEW 4: STUDENT EVIDENCE DIAGNOSIS (学生端证据自诊断) ================= -->
+      <section id="view-student" class="content-view space-y-6 hidden">
+        
+        <!-- Header Banner -->
+        <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2.5">
+              <span class="px-2 py-0.5 bg-sky-600 text-white rounded text-[11px] font-mono font-semibold">STUDENT PORT</span>
+              <h2 class="text-lg font-bold text-slate-900 tracking-tight" data-i18n="student_heading">学生端证据自诊断与面试辅导</h2>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[11px] font-mono font-semibold" data-i18n="student_tag">绝无虚假打分</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1.5 max-w-3xl leading-relaxed" data-i18n="student_sub">
+              输入您的简历或项目经验，比对企业已冻结的真实招聘标准。系统提供客观的 4 态证据诊断与针对性面试追问预演，帮助您明确真实能力边界。
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-2.5 shrink-0">
+            <button onclick="loadSampleStudentResume()" class="load-sample cursor-pointer px-3.5 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 shadow-2xs">
+              <i data-lucide="sparkles" class="w-4 h-4 text-brand-600"></i>
+              <span data-i18n="btn_fill_sample_resume">⚡ 载入样例材料 (Fill Sample)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Resume Input Box -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-slate-900 flex items-center space-x-2">
+              <i data-lucide="file-edit" class="w-4 h-4 text-sky-600"></i>
+              <span data-i18n="label_paste_resume">粘贴您的简历经历或项目描述 (Resume Text)</span>
+            </label>
+            <span class="text-[11px] font-mono text-slate-400" id="student-char-count">0 字</span>
+          </div>
+
+          <textarea id="student-resume-input" oninput="updateCharCount(this.value)" rows="6" placeholder="例如：负责法律知识库助手搭建，使用 LangChain 与 FastAPI。设计 8 套法律提示词，在 50 条测试集上评测响应准确率..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-brand-600 font-mono"></textarea>
+
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-[11px] text-slate-500">比对基准: <strong class="text-slate-800">P0 AI 应用产品经理 (标准哈希: 9f8a2c11...)</strong></span>
+            <button onclick="diagnoseStudentResume()" class="cursor-pointer px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-semibold transition shadow-sm flex items-center space-x-1.5">
+              <i data-lucide="stethoscope" class="w-4 h-4"></i>
+              <span data-i18n="btn_diagnose_now">开始客观证据诊断 (Diagnose)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Student Empty State (When not diagnosed yet) -->
+        <div id="empty-student" class="empty-state bg-white rounded-xl border-2 border-dashed border-slate-300 p-12 text-center shadow-card space-y-4">
+          <div class="w-14 h-14 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+            <i data-lucide="graduation-cap" class="w-7 h-7 text-slate-400"></i>
+          </div>
+          <div class="max-w-md mx-auto">
+            <h3 class="text-base font-bold text-slate-900" data-i18n="empty_student_title">尚未进行简历诊断 (No Diagnosis Run)</h3>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed" data-i18n="empty_student_copy">
+              输入您的经历材料，比对企业已冻结的岗位标准，生成 4 态证据分布与面试追问。
+            </p>
+          </div>
+          <div class="flex items-center justify-center space-x-3 pt-2">
+            <button onclick="loadSampleStudentResume()" class="load-sample cursor-pointer px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center space-x-1.5">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span data-i18n="btn_load_sample_student">⚡ 载入样例学生材料并诊断</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Populated Diagnosis Result -->
+        <div id="populated-student" class="space-y-6 hidden">
+          
+          <!-- Diagnosis Distribution Ribbon -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <h3 class="text-xs font-bold text-slate-900 flex items-center space-x-2">
+                <i data-lucide="pie-chart" class="w-4 h-4 text-brand-600"></i>
+                <span data-i18n="student_dist_title">4 态离散证据分布统计 (Rule R-11 Compliant)</span>
+              </h3>
+              <span class="text-[11px] font-mono text-emerald-600 font-bold">零虚假百分比打分</span>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+              <div class="badge-supported p-3 rounded-xl border">
+                <div class="text-xl font-bold font-mono" id="diag-count-supported">1</div>
+                <div class="text-xs font-semibold mt-0.5">已证实 (SUPPORTED)</div>
+              </div>
+              <div class="badge-partial p-3 rounded-xl border">
+                <div class="text-xl font-bold font-mono" id="diag-count-partial">1</div>
+                <div class="text-xs font-semibold mt-0.5">部分满足 (PARTIAL)</div>
+              </div>
+              <div class="badge-insufficient p-3 rounded-xl border">
+                <div class="text-xl font-bold font-mono" id="diag-count-insufficient">1</div>
+                <div class="text-xs font-semibold mt-0.5">材料不足 (INSUFFICIENT)</div>
+              </div>
+              <div class="badge-no-evidence p-3 rounded-xl border">
+                <div class="text-xl font-bold font-mono" id="diag-count-no-evidence">1</div>
+                <div class="text-xs font-semibold mt-0.5">完全无提及 (NO EVIDENCE)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Criteria Diagnosis Cards -->
+          <div id="student-diagnosis-cards" class="space-y-3">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Customized Interview Follow-up Questions -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-card space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <h3 class="text-xs font-bold text-slate-900 flex items-center space-x-2">
+                <i data-lucide="help-circle" class="w-4 h-4 text-amber-600"></i>
+                <span data-i18n="interview_prep_title">基于证据薄弱点推荐的面试追问预演 (Targeted Follow-up)</span>
+              </h3>
+              <span class="text-[10px] font-mono text-slate-400">帮助补充行动与指标证据</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs" id="student-interview-questions">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform transition-all duration-300 translate-y-20 opacity-0 bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-elevated text-xs flex items-center space-x-2 font-medium">
+    <i data-lucide="info" class="w-4 h-4 text-sky-400"></i>
+    <span id="toast-text">操作已完成</span>
+  </div>
+
+  <!-- ================= CLIENT JAVASCRIPT APP ================= -->
+  <script>
+    // --- Application State ---
+    let currentLang = 'zh'; // 'zh' or 'en'
+    let currentView = 'standard'; // 'standard', 'candidates', 'split-review', 'student'
+    let demoMode = true; // true: populated data, false: empty states
+    let currentSplitCand = 'cand_p0_001';
+
+    // --- Benchmark Data Fixtures ---
+    const CANDIDATE_DATA = {
+      cand_p0_001: {
+        name: '李四 (Li Si)',
+        code: 'cand_p0_001',
+        title: '运营助理 (Operations Assistant)',
+        verdict: 'PRIORITY_REVIEW',
+        verdictLabelZh: '优先打捞 (漏筛挽救)',
+        verdictLabelEn: 'PRIORITY RESCUE (OMISSION RECOVERED)',
+        verdictClass: 'bg-emerald-100 text-emerald-800',
+        rationaleZh: '虽然职能头衔为运营助理，但在大模型提示词评测与业务工作流搭建方面具备高价值真实经验，具备显著打捞价值。',
+        rationaleEn: 'Despite non-standard title of Operations Assistant, candidate has verified hands-on prompt evaluation and Dify workflow experience.',
+        resumeLines: [
+          '李四 - 个人简历',
+          '求职意向：AI 应用产品经理实习生 | 电话：138****0001 | 邮箱：lisi@test.com',
+          '--------------------------------------------------------------------------------',
+          '【教育背景】',
+          '某重点大学 | 电子商务专业 本科 | 2022.09 - 2026.06',
+          '--------------------------------------------------------------------------------',
+          '【工作经历】',
+          '某跨境电商公司 | 运营助理 (实习) | 2025.03 - 2025.08',
+          '- 负责日常海外客户工单流转与退换货问题分类处理。',
+          '- 发现客服团队每日需手动回复约 400 条重复咨询，时延高达 2 小时。',
+          '- 【核心产出】自主基于 Dify 平台设计搭建 RAG 智能客服工作流原型。',
+          '- 针对退款规则、物流状态等高频场景设计 12 套 Few-shot 提示词模板。',
+          '- 建立包含 120 条历史真实咨询的自动化评测 Benchmark，监控答复准确率。',
+          '- 通过测试集将准确率从初期的 64% 调优至 89%，幻觉拒答率达 98%。',
+          '- 推动将方案移交研发团队正式集成，日均自动消减 35% 重复工单。',
+          '- 协同法务与运营梳理大模型不可直接承诺的红线清单，建立兜底机制。',
+          '--------------------------------------------------------------------------------',
+          '【专业技能】',
+          '- 熟练使用 Dify、Coze 等 AI Agent 编排工具。',
+          '- 具备 Few-shot、COT 提示词调优与 Benchmark 评测基准构建能力。',
+          '- 熟练使用 SQL 进行日志数据分析，掌握基本的 Python 数据处理。'
+        ],
+        evidence: [
+          {
+            criterion: 'R1: 提示词工程与基准评测 (Weight 30%)',
+            state: 'SUPPORTED',
+            stateZh: '已证实 (SUPPORTED)',
+            badgeClass: 'badge-supported',
+            lines: 'L12-L14',
+            lineStart: 12,
+            lineEnd: 14,
+            quote: '针对退款规则、物流状态等高频场景设计 12 套 Few-shot 提示词模板；建立包含 120 条历史真实咨询的自动化评测 Benchmark，准确率从 64% 调优至 89%。',
+            causal: '具备明确的行动（设计 12 套模板）、产出（120 条测试集）与可量化指标（89% 准确率）。'
+          },
+          {
+            criterion: 'R2: 业务场景拆解与边界定义 (Weight 25%)',
+            state: 'SUPPORTED',
+            stateZh: '已证实 (SUPPORTED)',
+            badgeClass: 'badge-supported',
+            lines: 'L11, L15',
+            lineStart: 11,
+            lineEnd: 15,
+            quote: '自主基于 Dify 平台设计搭建 RAG 智能客服工作流原型；日均自动消减 35% 重复工单。',
+            causal: '将客服重复咨询痛点成功拆解为工作流并产生降本增效成果。'
+          },
+          {
+            criterion: 'R3: 跨职能交付与协同 (Weight 25%)',
+            state: 'SUPPORTED',
+            stateZh: '已证实 (SUPPORTED)',
+            badgeClass: 'badge-supported',
+            lines: 'L15-L16',
+            lineStart: 15,
+            lineEnd: 16,
+            quote: '推动将方案移交研发团队正式集成；协同法务与运营梳理大模型不可直接承诺的红线清单。',
+            causal: '具备明确的跨职能团队协同与边界约束意识。'
+          },
+          {
+            criterion: 'R4: RAG 与幻觉治理经验 (Weight 20%)',
+            state: 'PARTIAL',
+            stateZh: '部分满足 (PARTIAL)',
+            badgeClass: 'badge-partial',
+            lines: 'L14',
+            lineStart: 14,
+            lineEnd: 14,
+            quote: '幻觉拒答率达 98%。',
+            causal: '有提到幻觉控制指标，但未详细展开向量数据库选型与分块召回调优细节。'
+          }
+        ]
+      },
+      cand_p0_002: {
+        name: '王五 (Wang Wu)',
+        code: 'cand_p0_002',
+        title: 'AI 首席架构师 (Lead AI Architect)',
+        verdict: 'NEEDS_EVIDENCE',
+        verdictLabelZh: '待补充证据 (防虚高预警)',
+        verdictLabelEn: 'NEEDS EVIDENCE (BUZZWORD ALERT)',
+        verdictClass: 'bg-amber-100 text-amber-800',
+        rationaleZh: '简历大肆堆砌千万级多智能体协同等高深词汇，但文本分析显示无具体代码、评测集或业务指标落地，触发防虚高预警。',
+        rationaleEn: 'Extensive buzzwords regarding multi-agent frameworks, but zero verifiable quantitative metrics or benchmark sets.',
+        resumeLines: [
+          '王五 - 个人简历',
+          '求职意向：AI 应用产品总监 / 架构师 | 电话：139****0002',
+          '--------------------------------------------------------------------------------',
+          '【项目经验】',
+          '全自研通用 AGI 智能体矩阵平台 | 核心主导人 | 2024.10 - 2025.04',
+          '- 架构全球领先的千亿级参数多模态自主进化智能体系统。',
+          '- 深度颠覆人类交互范式，打造端到端自适应认知中枢。',
+          '- 全面赋能各行业生态，重构产业级价值链路。',
+          '--------------------------------------------------------------------------------',
+          '【专业技能】',
+          '- 精通 AGI、大模型所有前沿理论、量子大模型思考。'
+        ],
+        evidence: [
+          {
+            criterion: 'R1: 提示词工程与基准评测 (Weight 30%)',
+            state: 'NO_EVIDENCE',
+            stateZh: '完全无提及 (NO_EVIDENCE)',
+            badgeClass: 'badge-no-evidence',
+            lines: '全篇无提及',
+            lineStart: null,
+            lineEnd: null,
+            quote: '“未提及任何关于 Few-shot、COT 或评测集规模的具体内容”',
+            causal: '未提供任何评测方法或测试集。'
+          },
+          {
+            criterion: 'R2: 业务场景拆解与边界定义 (Weight 25%)',
+            state: 'MATERIAL_INSUFFICIENT',
+            stateZh: '材料不足 (MATERIAL_INSUFFICIENT)',
+            badgeClass: 'badge-insufficient',
+            lines: 'L5-L7',
+            lineStart: 5,
+            lineEnd: 7,
+            quote: '架构全球领先的千亿级参数多模态自主进化智能体系统；深度颠覆人类交互范式。',
+            causal: '仅罗列高深抽象概念，无实际落地场景与输入输出流转。'
+          }
+        ]
+      },
+      cand_p0_003: {
+        name: '张三 (Zhang San)',
+        code: 'cand_p0_003',
+        title: '产品实习生 (Product Intern)',
+        verdict: 'STANDARD_REVIEW',
+        verdictLabelZh: '常规复核 (双端一致)',
+        verdictLabelEn: 'STANDARD REVIEW',
+        verdictClass: 'bg-sky-100 text-sky-800',
+        rationaleZh: '具备正规的大模型产品需求 PRD 撰写与上线经验，两端结论一致。',
+        rationaleEn: 'Standard product management experience with PRD writing and LLM assistant rollout.',
+        resumeLines: [
+          '张三 - 个人简历',
+          '求职意向：AI PM | 某 985 高校计算机专业本科',
+          '- 撰写 AI 问答助手完整 PRD 文档，规划 5 个核心交互页面。',
+          '- 协同算法工程师进行测试集构建与日常 Badcase 标注。'
+        ],
+        evidence: [
+          {
+            criterion: 'R1: 提示词工程与基准评测 (Weight 30%)',
+            state: 'PARTIAL',
+            stateZh: '部分满足 (PARTIAL)',
+            badgeClass: 'badge-partial',
+            lines: 'L4',
+            lineStart: 4,
+            lineEnd: 4,
+            quote: '协同算法工程师进行测试集构建与日常 Badcase 标注。',
+            causal: '有测试集标注行动，但缺少自建规模与自动化评测框架。'
+          }
+        ]
+      },
+      cand_p0_004: {
+        name: '赵六 (Zhao Liu)',
+        code: 'cand_p0_004',
+        title: '平面设计师 (Graphic Designer)',
+        verdict: 'NOT_SUPPORTED',
+        verdictLabelZh: '不予支持 (证据缺失)',
+        verdictLabelEn: 'NOT SUPPORTED',
+        verdictClass: 'bg-slate-100 text-slate-700',
+        rationaleZh: '仅具备生图工具使用经验，无大语言模型产品规划、业务拆解或评测能力。',
+        rationaleEn: 'Image generation tool usage only; zero LLM product or evaluation evidence.',
+        resumeLines: [
+          '赵六 - 个人简历',
+          '求职意向：设计 / 产品 | 艺术设计专业',
+          '- 熟练使用 Midjourney 与 Stable Diffusion 制作营销海报。'
+        ],
+        evidence: [
+          {
+            criterion: 'R1: 提示词工程与基准评测 (Weight 30%)',
+            state: 'NO_EVIDENCE',
+            stateZh: '完全无提及 (NO_EVIDENCE)',
+            badgeClass: 'badge-no-evidence',
+            lines: '全篇无提及',
+            lineStart: null,
+            lineEnd: null,
+            quote: '“未提及任何 LLM 提示词或评测”',
+            causal: '触发空能力原则 (Rule R-03)。'
+          }
+        ]
+      }
+    };
+
+    // --- Student Sample Data ---
+    const SAMPLE_STUDENT_RESUME = `某高校本科生 - 计算机科学专业 (2026 届)
+项目经历：智能法律咨询助手 (校园大创重点项目)
+- 负责系统整体业务流程规划，基于 FastAPI 与 LangChain 搭建对话后端。
+- 收集中国裁判文书网公开案例，针对常见劳动仲裁场景设计 8 套法律提示词模板。
+- 组织 3 位法学专业同学构建 50 条问答测试集，人工评测法律法条引用准确率。
+- 引入 SQLite 本地存储历史对话会话，单次会话时延控制在 1.8 秒内。`;
+
+    // --- I18N Translations Dictionary ---
+    const I18N = {
+      zh: {
+        app_title: '新兴岗位招聘复核',
+        sidebar_active_role_label: '当前复核岗位 (P0 Target)',
+        role_badge: 'AI 应用产品经理 (实习/初级)',
+        nav_hr_group: 'HR 复核工作台 (HR Port)',
+        nav_standard: '标准确认与冻结',
+        nav_candidates: '候选人分诊队列',
+        nav_split_review: '简历双栏与行级证据',
+        nav_student_group: '候选人诊断 (Student Port)',
+        nav_student: '学生端证据自诊断',
+        nav_student_badge: '自检',
+        toggle_demo_title: '示范案例模式',
+        demo_active_desc: '已载入 P0 示范案例 (4人批次)',
+        demo_inactive_desc: '空状态模式 (可测试 1-Click 载入)',
+        breadcrumb_root: '招聘复核工作台',
+        breadcrumb_role: 'AI PM (实习/初级)',
+        view_title_standard: '标准确认与冻结',
+        view_title_candidates: '候选人初筛分诊队列',
+        view_title_split: '简历双栏行级证据核验',
+        view_title_student: '学生端证据自诊断',
+        top_status_frozen: '标准已冻结 (FROZEN SHA-256)',
+        btn_next_view: '下一步',
+        btn_freeze_standard: '重新计算并冻结标准',
+        btn_load_p0_standard: '⚡ 载入 P0 官方标准 (Load Benchmark)',
+        empty_standard_title: '尚未创建岗位标准 (No Standard Created)',
+        empty_standard_copy: '从输入用人部门原始业务需求开始，或一键载入官方 P0 初级/实习 AI 应用产品经理基准规范。',
+        btn_open_deep_review: '进入深度行级证据核验 →',
+        btn_load_p0_cands: '⚡ 载入 4 类典型候选人测试集',
+        empty_cands_title: '候选人复核队列为空 (Candidate Queue Empty)',
+        empty_cands_copy: '导入脱敏候选人简历批次，系统将自动执行漏筛打捞与防虚高复核。',
+        btn_inspect_evidence: '核查行级证据与改判 →',
+        label_switch_cand: '切换候选人:',
+        adjudication_title: '用人经理 / HR 最终裁决 (Human Adjudication)',
+        action_adopt: '采纳智能复核建议 (打捞面试)',
+        action_override: '人工改判决定 (Override)',
+        override_label: '请输入改判理由 (Mandatory Justification - Rule R-10):',
+        btn_commit_decision: '确认并提交合规决议',
+        btn_fill_sample_resume: '⚡ 载入样例材料 (Fill Sample)',
+        label_paste_resume: '粘贴您的简历经历或项目描述 (Resume Text)',
+        btn_diagnose_now: '开始客观证据诊断 (Diagnose)',
+        empty_student_title: '尚未进行简历诊断 (No Diagnosis Run)',
+        empty_student_copy: '输入您的经历材料，比对企业已冻结的岗位标准，生成 4 态证据分布与面试追问。',
+        btn_load_sample_student: '⚡ 载入样例学生材料并诊断',
+        student_dist_title: '4 态离散证据分布统计 (Rule R-11 Compliant)',
+        interview_prep_title: '基于证据薄弱点推荐的面试追问预演 (Targeted Follow-up)',
+      },
+      en: {
+        app_title: 'Hiring Review Workbench',
+        sidebar_active_role_label: 'Target Benchmark Role (P0)',
+        role_badge: 'Junior / Intern AI App PM',
+        nav_hr_group: 'HR Review Workbench (HR Port)',
+        nav_standard: 'Standard Formulation',
+        nav_candidates: 'Candidate Triage Queue',
+        nav_split_review: 'Resume Split-Pane Review',
+        nav_student_group: 'Student Diagnosis (Student Port)',
+        nav_student: 'Student Self-Diagnosis',
+        nav_student_badge: 'Audit',
+        toggle_demo_title: 'Demo Benchmark Mode',
+        demo_active_desc: 'Loaded P0 Benchmark (4 Candidates)',
+        demo_inactive_desc: 'Empty State Mode (Test 1-Click Load)',
+        breadcrumb_root: 'Hiring Workbench',
+        breadcrumb_role: 'AI PM (Junior/Intern)',
+        view_title_standard: 'Standard Formulation & Freeze',
+        view_title_candidates: 'Candidate Triage Queue',
+        view_title_split: 'Deep Split-Pane Line Evidence',
+        view_title_student: 'Student Evidence Diagnosis',
+        top_status_frozen: 'Standard Frozen (SHA-256 Validated)',
+        btn_next_view: 'Next View',
+        btn_freeze_standard: 'Recalculate & Freeze Standard',
+        btn_load_p0_standard: '⚡ Load P0 Benchmark Standard',
+        empty_standard_title: 'No Hiring Standard Created',
+        empty_standard_copy: 'Start by clarifying raw enterprise business tasks, or load the official P0 Junior AI PM benchmark.',
+        btn_open_deep_review: 'Open Deep Line Evidence Review →',
+        btn_load_p0_cands: '⚡ Load 4-Archetype Benchmark Batch',
+        empty_cands_title: 'Candidate Review Queue Empty',
+        empty_cands_copy: 'Upload anonymized resumes to run automated omission rescue and overestimation triage.',
+        btn_inspect_evidence: 'Inspect Line Evidence & Adjudicate →',
+        label_switch_cand: 'Select Candidate:',
+        adjudication_title: 'Hiring Manager / HR Final Adjudication',
+        action_adopt: 'Adopt AI Recommendation (Rescue Interview)',
+        action_override: 'Human Override Decision',
+        override_label: 'Enter Justification Reason (Rule R-10):',
+        btn_commit_decision: 'Commit & Sign Audit Trail',
+        btn_fill_sample_resume: '⚡ Fill Sample Material',
+        label_paste_resume: 'Paste Your Resume or Project Text',
+        btn_diagnose_now: 'Run Objective Evidence Diagnosis',
+        empty_student_title: 'No Diagnosis Run Yet',
+        empty_student_copy: 'Paste your experience to evaluate against the frozen hiring standard. No fake percentages.',
+        btn_load_sample_student: '⚡ Load Sample Resume & Diagnose',
+        student_dist_title: '4-State Evidence Distribution (Rule R-11)',
+        interview_prep_title: 'Targeted Interview Prep Questions from Evidence Gaps',
+      }
+    };
+
+    // --- Core Functions ---
+
+    function initApp() {
+      lucide.createIcons();
+      updateDemoStateUI();
+      renderSplitCandidate(currentSplitCand);
+      checkBackendHealth();
+    }
+
+    function goToView(viewId) {
+      currentView = viewId;
+      document.querySelectorAll('.content-view').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById('view-' + viewId);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Update sidebar nav active classes
+      document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-100', 'font-bold', 'text-brand-600');
+        btn.classList.add('text-slate-700');
+      });
+      const activeBtn = document.getElementById('nav-btn-' + viewId);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-slate-100', 'font-bold', 'text-brand-600');
+      }
+
+      // Update breadcrumb
+      const topTitle = document.getElementById('top-current-view-title');
+      const titleKey = 'view_title_' + (viewId === 'split-review' ? 'split' : viewId);
+      if (topTitle) topTitle.innerText = I18N[currentLang][titleKey] || viewId;
+
+      lucide.createIcons();
+    }
+
+    function goToNextView() {
+      const order = ['standard', 'candidates', 'split-review', 'student'];
+      const nextIndex = (order.indexOf(currentView) + 1) % order.length;
+      goToView(order[nextIndex]);
+    }
+
+    function toggleDemoMode() {
+      demoMode = !demoMode;
+      const thumb = document.getElementById('demo-switch-thumb');
+      const toggle = document.getElementById('toggle-demo-switch');
+      const label = document.getElementById('demo-subtext-label');
+
+      if (demoMode) {
+        toggle.classList.remove('bg-slate-300');
+        toggle.classList.add('bg-brand-600');
+        thumb.classList.remove('translate-x-0.5');
+        thumb.classList.add('translate-x-4');
+        label.innerText = I18N[currentLang].demo_active_desc;
+        showToast(currentLang === 'zh' ? '已开启示范模式，载入官方基准数据' : 'Demo mode enabled with benchmark data');
+      } else {
+        toggle.classList.remove('bg-brand-600');
+        toggle.classList.add('bg-slate-300');
+        thumb.classList.remove('translate-x-4');
+        thumb.classList.add('translate-x-0.5');
+        label.innerText = I18N[currentLang].demo_inactive_desc;
+        showToast(currentLang === 'zh' ? '已关闭示范模式，进入空状态视图' : 'Demo mode disabled, showing empty states');
+      }
+      updateDemoStateUI();
+    }
+
+    function updateDemoStateUI() {
+      const emptyStandard = document.getElementById('empty-standard');
+      const popStandard = document.getElementById('populated-standard');
+      const emptyCands = document.getElementById('empty-candidates');
+      const popCands = document.getElementById('populated-candidates');
+
+      if (demoMode) {
+        if (emptyStandard) emptyStandard.classList.add('hidden');
+        if (popStandard) popStandard.classList.remove('hidden');
+        if (emptyCands) emptyCands.classList.add('hidden');
+        if (popCands) popCands.classList.remove('hidden');
+      } else {
+        if (emptyStandard) emptyStandard.classList.remove('hidden');
+        if (popStandard) popStandard.classList.add('hidden');
+        if (emptyCands) emptyCands.classList.remove('hidden');
+        if (popCands) popCands.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function loadDemoStandard() {
+      demoMode = true;
+      const thumb = document.getElementById('demo-switch-thumb');
+      const toggle = document.getElementById('toggle-demo-switch');
+      toggle.classList.add('bg-brand-600');
+      toggle.classList.remove('bg-slate-300');
+      thumb.classList.add('translate-x-4');
+      thumb.classList.remove('translate-x-0.5');
+      document.getElementById('demo-subtext-label').innerText = I18N[currentLang].demo_active_desc;
+      updateDemoStateUI();
+      showToast(currentLang === 'zh' ? '已载入 P0 官方标准规范' : 'Loaded P0 Benchmark Standard');
+    }
+
+    function loadDemoCandidates() {
+      demoMode = true;
+      const thumb = document.getElementById('demo-switch-thumb');
+      const toggle = document.getElementById('toggle-demo-switch');
+      toggle.classList.add('bg-brand-600');
+      toggle.classList.remove('bg-slate-300');
+      thumb.classList.add('translate-x-4');
+      thumb.classList.remove('translate-x-0.5');
+      document.getElementById('demo-subtext-label').innerText = I18N[currentLang].demo_active_desc;
+      updateDemoStateUI();
+      showToast(currentLang === 'zh' ? '已载入 4 类典型候选人测试集' : 'Loaded 4-Archetype Candidate Batch');
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'zh' ? 'en' : 'zh';
+      document.getElementById('lang-text').innerText = currentLang === 'zh' ? '🇨🇳 中文 / 🇬🇧 EN' : '🇬🇧 EN / 🇨🇳 中文';
+      document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+
+      // Update all elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[currentLang] && I18N[currentLang][key]) {
+          el.innerText = I18N[currentLang][key];
+        }
+      });
+
+      // Update dynamic elements
+      const topTitle = document.getElementById('top-current-view-title');
+      const titleKey = 'view_title_' + (currentView === 'split-review' ? 'split' : currentView);
+      if (topTitle) topTitle.innerText = I18N[currentLang][titleKey] || currentView;
+
+      const label = document.getElementById('demo-subtext-label');
+      if (label) label.innerText = demoMode ? I18N[currentLang].demo_active_desc : I18N[currentLang].demo_inactive_desc;
+
+      renderSplitCandidate(currentSplitCand);
+      showToast(currentLang === 'zh' ? '已切换至简体中文' : 'Switched to English');
+    }
+
+    // --- Split-Pane Line Citation Review ---
+
+    function inspectCandidateInSplitReview(candId) {
+      currentSplitCand = candId;
+      const sel = document.getElementById('split-candidate-selector');
+      if (sel) sel.value = candId;
+      goToView('split-review');
+      renderSplitCandidate(candId);
+    }
+
+    function onSplitCandidateChange(candId) {
+      currentSplitCand = candId;
+      renderSplitCandidate(candId);
+    }
+
+    function renderSplitCandidate(candId) {
+      const data = CANDIDATE_DATA[candId] || CANDIDATE_DATA.cand_p0_001;
+
+      // Update Header info
+      document.getElementById('detail-cand-name').innerText = data.name;
+      const verdictPill = document.getElementById('detail-verdict-pill');
+      verdictPill.className = `px-2 py-0.5 rounded text-[10px] font-mono font-bold ${data.verdictClass}`;
+      verdictPill.innerText = currentLang === 'zh' ? data.verdictLabelZh : data.verdictLabelEn;
+      document.getElementById('detail-cand-rationale').innerText = currentLang === 'zh' ? data.rationaleZh : data.rationaleEn;
+      document.getElementById('resume-doc-title').innerText = `${data.name.split(' ')[0]}_脱敏简历材料.pdf`;
+
+      // Render Resume Lines
+      const linesContainer = document.getElementById('resume-lines-container');
+      linesContainer.innerHTML = '';
+      data.resumeLines.forEach((text, idx) => {
+        const lineNum = idx + 1;
+        const lineDiv = document.createElement('div');
+        lineDiv.id = `resume-line-${lineNum}`;
+        lineDiv.className = 'flex items-start space-x-3 py-0.5 px-2 rounded hover:bg-slate-50 transition-colors';
+        lineDiv.innerHTML = `
+          <span class="w-8 shrink-0 text-slate-400 select-none text-right font-mono text-[11px]">L${lineNum}</span>
+          <span class="text-slate-800 break-words leading-relaxed">${escapeHtml(text)}</span>
+        `;
+        linesContainer.appendChild(lineDiv);
+      });
+
+      // Render Evidence Cards
+      const cardsContainer = document.getElementById('evidence-cards-container');
+      cardsContainer.innerHTML = '';
+      data.evidence.forEach((ev, i) => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-xl border border-slate-200 p-4 shadow-card space-y-2';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-slate-900">${ev.criterion}</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${ev.badgeClass}">${ev.state}</span>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded p-2.5 text-xs text-slate-700 italic border-l-4 border-l-brand-600">
+            "${escapeHtml(ev.quote)}"
+          </div>
+          <div class="flex items-center justify-between text-[11px] pt-1">
+            <span class="text-slate-500">${escapeHtml(ev.causal)}</span>
+            ${ev.lineStart ? `
+              <button onclick="highlightResumeLines(${ev.lineStart}, ${ev.lineEnd})" class="cursor-pointer font-mono font-bold text-brand-600 hover:underline flex items-center space-x-1">
+                <i data-lucide="crosshair" class="w-3 h-3"></i>
+                <span>[${ev.lines}]</span>
+              </button>
+            ` : `<span class="font-mono text-slate-400">[无行号]</span>`}
+          </div>
+        `;
+        cardsContainer.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function highlightResumeLines(startLine, endLine) {
+      // Clear previous highlights
+      document.querySelectorAll('.highlight-active').forEach(el => {
+        el.classList.remove('highlight-active');
+      });
+
+      const actualEnd = endLine || startLine;
+      let firstEl = null;
+
+      for (let l = startLine; l <= actualEnd; l++) {
+        const el = document.getElementById(`resume-line-${l}`);
+        if (el) {
+          el.classList.add('highlight-active');
+          if (!firstEl) firstEl = el;
+        }
+      }
+
+      if (firstEl) {
+        firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      showToast(currentLang === 'zh' ? `已在左侧高亮锚定行: L${startLine}-L${actualEnd}` : `Highlighted lines L${startLine}-L${actualEnd}`);
+    }
+
+    function toggleOverrideInput(show) {
+      const box = document.getElementById('override-reason-box');
+      if (show) {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    function commitDecision() {
+      const isOverride = document.querySelector('input[name="adjudication_action"]:checked').value === 'OVERRIDE';
+      const reason = document.getElementById('override-reason-input').value.trim();
+
+      if (isOverride && !reason) {
+        alert(currentLang === 'zh' ? '规则 R-10: 人工改判必须输入事实改判理由！' : 'Rule R-10: An explicit override justification is required!');
+        return;
+      }
+
+      showToast(currentLang === 'zh' ? '合规决议已保存并写入 SHA-256 审计链' : 'Adjudication decision committed with audit hash');
+    }
+
+    function toggleStandardFreeze() {
+      showToast(currentLang === 'zh' ? '已重新锁定标准规约版本 (SHA-256: 9f8a2c11...)' : 'Standard spec frozen with SHA-256 hash');
+    }
+
+    // --- Student Diagnosis Functions ---
+
+    function updateCharCount(text) {
+      document.getElementById('student-char-count').innerText = `${text.length} ${currentLang === 'zh' ? '字' : 'chars'}`;
+    }
+
+    function loadSampleStudentResume() {
+      const input = document.getElementById('student-resume-input');
+      input.value = SAMPLE_STUDENT_RESUME;
+      updateCharCount(SAMPLE_STUDENT_RESUME);
+      diagnoseStudentResume();
+    }
+
+    function diagnoseStudentResume() {
+      const text = document.getElementById('student-resume-input').value.trim();
+      if (!text) {
+        alert(currentLang === 'zh' ? '请先输入简历或项目描述内容' : 'Please paste resume or project text first');
+        return;
+      }
+
+      document.getElementById('empty-student').classList.add('hidden');
+      document.getElementById('populated-student').classList.remove('hidden');
+
+      // Populate diagnosis cards
+      const diagContainer = document.getElementById('student-diagnosis-cards');
+      diagContainer.innerHTML = `
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-slate-900">R1: 提示词工程与基准评测</span>
+            <span class="badge-supported px-2 py-0.5 rounded text-[10px] font-mono font-bold">SUPPORTED</span>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-700 italic border-l-4 border-l-emerald-500">
+            "针对常见劳动仲裁场景设计 8 套法律提示词模板；构建 50 条问答测试集人工评测准确率。"
+          </div>
+          <p class="text-[11px] text-slate-500">已具备 Few-shot 设计与基础测试集评测经验。</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-slate-900">R2: 业务场景拆解与边界定义</span>
+            <span class="badge-partial px-2 py-0.5 rounded text-[10px] font-mono font-bold">PARTIAL</span>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-700 italic border-l-4 border-l-amber-500">
+            "负责系统整体业务流程规划，基于 FastAPI 与 LangChain 搭建对话后端。"
+          </div>
+          <p class="text-[11px] text-slate-500">具备工程落地实现，但缺乏复杂分支异常流转设计说明。</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-slate-900">R3: 跨职能交付与协同</span>
+            <span class="badge-insufficient px-2 py-0.5 rounded text-[10px] font-mono font-bold">MATERIAL_INSUFFICIENT</span>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-700 italic border-l-4 border-l-indigo-500">
+            "组织 3 位法学专业同学构建 50 条测试集。"
+          </div>
+          <p class="text-[11px] text-slate-500">仅有简单的同学协作，缺乏产研、设计与商业端协同交付数据。</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-card space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-slate-900">R4: RAG 与幻觉治理</span>
+            <span class="badge-no-evidence px-2 py-0.5 rounded text-[10px] font-mono font-bold">NO_EVIDENCE</span>
+          </div>
+          <p class="text-[11px] text-slate-500">简历未提及任何有关法律法条防幻觉、拒答机制或知识库召回调优的内容。</p>
+        </div>
+      `;
+
+      // Populate interview questions
+      const questionsContainer = document.getElementById('student-interview-questions');
+      questionsContainer.innerHTML = `
+        <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-lg space-y-1">
+          <div class="font-bold text-amber-900">针对【R4 幻觉治理】薄弱点的追问预演:</div>
+          <p class="text-amber-800 leading-relaxed">
+            "在法律咨询助手回答复杂劳动纠纷时，大模型一旦编造法条将带来严重法律风险。请问在你的项目中，如何设置严格的拒答机制与检索证据锚定？"
+          </p>
+        </div>
+        <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-1">
+          <div class="font-bold text-slate-900">针对【R1 评测基准】的深度追问:</div>
+          <p class="text-slate-700 leading-relaxed">
+            "你提到的 50 条测试集是如何保证覆盖度和多样性的？评测标准是人工主观打分还是定义了具体的逐项 Rubric？"
+          </p>
+        </div>
+      `;
+
+      lucide.createIcons();
+      showToast(currentLang === 'zh' ? '客观证据诊断完成，已生成 4 态分布与面试追问' : 'Diagnosis complete with 4-state distribution');
+    }
+
+    // --- Backend API Health Check ---
+
+    async function checkBackendHealth() {
+      try {
+        const res = await fetch('http://127.0.0.1:3000/api/v1/tasks', { method: 'GET' });
+        if (res.ok) {
+          document.getElementById('api-status-dot').className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+          document.getElementById('api-status-text').innerText = 'API Connected (3000)';
+        }
+      } catch (e) {
+        // Fallback to client mock
+        document.getElementById('api-status-dot').className = 'w-2 h-2 rounded-full bg-amber-500';
+        document.getElementById('api-status-text').innerText = 'Mock Adapter Active';
+      }
+    }
+
+    // --- Toast & Utils ---
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      text.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+      lucide.createIcons();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Keyboard navigation: 1-4 quick switch
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === '1') goToView('standard');
+      if (e.key === '2') goToView('candidates');
+      if (e.key === '3') goToView('split-review');
+      if (e.key === '4') goToView('student');
+    });
+
+    // Boot up
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>

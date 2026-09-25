@@ -1,56 +1,53 @@
-# AI Hiring Workbench
+# AI Hiring Workbench | 新兴岗位招聘复核工作台
 
-面向新兴岗位招聘的团队协作仓库。
+新兴岗位招聘标准制定与漏筛复核工作台。  
+*Emerging role hiring standard formulation & screening omission review workbench.*
 
-> 当前状态：**需求与技术方案阶段**。本仓库只提供分工目录、协作规则和设计文档，尚未提交产品实现代码，也尚未执行真实 Eval。
+---
 
-## 产品定义
+## 技术栈 / Tech Stack
 
-当企业准备招聘一个不熟悉或快速变化的岗位时，帮助 HR 和用人经理把模糊业务需求转成一套经过人工确认、来源可追溯的招聘标准，再用这套标准复核简历，找出可能被关键词筛选遗漏的候选人。
+* **Backend:** Fastify (Node.js) + TypeScript + Zod
+* **AI Engine:** DeepSeek (V3 & R1)
+* **Database:** PostgreSQL (Supabase)
+* **Frontend:** Vite + React (TypeScript) + Tailwind CSS
 
-项目同时包含学生端，但两端共用同一套证据模型和招聘标准，原始数据相互隔离。
+---
 
-## 团队目录
+## 目录结构 / Repository Structure
 
 ```text
 .
-├─ ai/          # 模型调用、Prompt、Schema 与 AI 模块
-├─ backend/     # 后端、数据库与 API 实现
-├─ data/        # 授权数据、脱敏规则与数据版本说明
-├─ design/      # 产品原型、交互说明与 Demo 素材
-├─ docs/        # 架构、API 合同与 Eval 状态文档
-├─ eval/        # 数据集清单、基线、指标和评测结果
-└─ frontend/    # HR 端与学生端前端实现
+├── backend/        # 后端 API、业务服务与评测引擎 / Backend API & eval runner
+├── design/         # UI/UX 原型与设计思考规范 / UI/UX design specs & prototype
+├── docs/           # 接口规范与技术集成文档 / Documentation & API contracts
+├── eval report/    # 基准评测报告与指标总结 / Benchmark evaluation reports
+├── frontend/       # 前端客户端应用 (即将推出) / Frontend client (coming soon)
+└── README.md       # 项目说明文档 / Project overview
 ```
 
-每个实现目录目前只包含职责说明。负责人确定技术方案后，再在自己的分支中初始化代码。
+---
 
-## 协作方式
+## 快速开始 / Quick Start
 
-1. 从 `main` 创建个人功能分支；
-2. 一个任务对应一个 Issue 和一个分支；
-3. 完成后提交 Pull Request；
-4. 至少一名队友检查后再合并；
-5. 业务规则、字段和 Eval 口径变更必须同步更新 `docs/`；
-6. 不直接向 `main` 推送未评审的实现代码。
+### 1. 后端配置与运行 / Backend Setup
+```bash
+cd backend
+npm install
+cp .env.example .env
+npm run build
+npm run dev
+```
+服务默认运行在 / Server runs on: `http://127.0.0.1:3000`
 
-详细要求见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+### 2. 运行基准评测 / Run Benchmark Evaluation
+```bash
+cd backend
+npm run eval        # 离线确定性评测 (无需 API Key) / Offline deterministic run
+npm run eval:live   # 联网调用 DeepSeek (需要配置 API Key) / Live DeepSeek run
+```
+评测报告将自动输出至 / Evaluation reports are exported directly to: `eval report/`
 
-## 数据安全
-
-- 不提交真实姓名、电话、邮箱、原始简历或企业内部资料；
-- `data/private/` 默认被 Git 忽略；
-- 示例材料只能使用授权脱敏数据或明确标记的合成数据；
-- API Key 只能通过本地环境变量管理，不能进入 Git 历史。
-
-## 当前边界
-
-- 产品与技术文档：已有初版，等待团队确认；
-- 前端、后端和 AI 代码：尚未开始；
-- 真实模型接入：尚未开始；
-- 真实数据与独立 Gold：尚未取得；
-- 正式 Eval：尚未执行。
-
-## License
-
-当前仓库尚未选择开源许可证。在确认赛事提交和代码开放策略前，不默认授予外部使用许可。
+### 3. 前端应用 / Frontend
+前端客户端目前正在积极开发中，测试界面即将推出。  
+*Frontend application is under active development and will be available for testing soon.*

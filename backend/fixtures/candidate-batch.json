@@ -1,0 +1,34 @@
+[
+  {
+    "id": "CAND_RESCUE_01",
+    "anonymousId": "CAND_ANON_RESCUE_01",
+    "surfaceTitle": "Customer Operations Intern / Support Specialist",
+    "sourceType": "BATCH_UPLOAD",
+    "expectedTriage": "PRIORITY_REVIEW",
+    "rawText": "L001: [Profile] Undergraduate Senior, Information Management Major, Class of 2026\nL002: [Objective] AI Product Manager Intern / Data Operations Intern\nL003: \nL004: [Internship] Cross-Border E-Commerce Corp | User Operations Intern (2025.06 - 2025.12)\nL005: 1. Reviewed customer service tickets and negative reviews; curated and labeled 800+ benchmark QA pairs.\nL006: 2. Built internal LLM knowledge base; authored 3 core prompt templates for returns, exchanges, and delivery delays.\nL007: 3. Designed Excel evaluation scorecards comparing model responses with human gold standards; tracked hallucination and refusal rates.\nL008: 4. Introduced few-shot examples and JSON schema constraints into prompts, increasing agent adoption accuracy from 68% to 82%.\nL009: 5. Authored internal SOP and trained 15 frontline support agents to use the AI response draft tool.\nL010: \nL011: [Skills]\nL012: - Proficient in Excel (VLOOKUP, Pivot Tables) and basic SQL querying.\nL013: - Hands-on Prompt Engineering (Few-shot, Chain-of-Thought, persona constraints).\nL014: - Solid badcase root-cause analysis and evaluation scorecard design."
+  },
+  {
+    "id": "CAND_BUZZWORD_02",
+    "anonymousId": "CAND_ANON_BUZZWORD_02",
+    "surfaceTitle": "AI Innovation Partner / Autonomous Agent Architect",
+    "sourceType": "BATCH_UPLOAD",
+    "expectedTriage": "NEEDS_INFO",
+    "rawText": "L001: [Profile] University Senior, Software Engineering, Class of 2025\nL002: [Objective] AI Product Manager / LLM Solutions Architect\nL003: \nL004: [Project Experience] Autonomous Multi-Agent Swarm Enterprise Ecosystem (2025.03 - 2025.08)\nL005: 1. Spearheaded macro strategic planning for multi-agent LLM systems; drove core Transformer architecture innovation.\nL006: 2. Architected comprehensive cognitive intelligence platform integrating LangChain, AutoGPT, and vector databases.\nL007: 3. Led global cross-functional team empowering billion-dollar commercial operations, increasing gross GMV by 300%.\nL008: 4. Explored next-generation AGI world models, revolutionizing decision pipelines and enterprise productivity.\nL009: \nL010: [Core Competencies]\nL011: - Expert in Autonomous Agents, LLM Fine-Tuning, Vector Databases, Prompt Topology, AGI Strategic Roadmaps."
+  },
+  {
+    "id": "CAND_QUALIFIED_03",
+    "anonymousId": "CAND_ANON_QUALIFIED_03",
+    "surfaceTitle": "AI Product Management Intern",
+    "sourceType": "BATCH_UPLOAD",
+    "expectedTriage": "STANDARD_REVIEW",
+    "rawText": "L001: [Profile] Top Tier University, B.S. in Computer Science, Class of 2026\nL002: [Objective] Junior / Intern AI Application Product Manager\nL003: \nL004: [Internship] AI Tech Startup | AI Product Management Intern (2025.07 - 2025.11)\nL005: 1. Evaluated RAG knowledge base performance; created gold benchmark dataset containing 400 domain QA pairs.\nL006: 2. Monitored retrieval and generation quality; authored evaluation scorecards measuring MRR@5 and Faithfulness metrics.\nL007: 3. Addressed long-context truncation issues by optimizing chunking strategy and prompt context assembly logic.\nL008: 4. Collaborated with engineering to deploy vector reranker, improving end-user response satisfaction by 18%.\nL009: \nL010: [Technical Skills]\nL011: - Python data analysis (Pandas, NumPy); hands-on experience with LLM evaluation tools (Ragas).\nL012: - Rigorous product experimentation and comparative A/B evaluation design."
+  },
+  {
+    "id": "CAND_UNQUALIFIED_04",
+    "anonymousId": "CAND_ANON_UNQUALIFIED_04",
+    "surfaceTitle": "Administrative Assistant / Receptionist",
+    "sourceType": "BATCH_UPLOAD",
+    "expectedTriage": "NOT_SUPPORTED",
+    "rawText": "L001: [Profile] Associate Degree, Secretarial Studies, Class of 2024\nL002: [Objective] Administrative Specialist / Office Clerk\nL003: \nL004: [Work Experience] Property Management Co. | Front Desk Clerk (2024.08 - 2025.08)\nL005: 1. Greeted visitors, managed guest registration, and coordinated conference room bookings.\nL006: 2. Procured, inventoried, and distributed office supplies and stationery.\nL007: 3. Assisted HR with filing paper employee records and monthly attendance logs.\nL008: 4. Performed routine general office duties assigned by management.\nL009: \nL010: [Strengths]\nL011: - Excellent communication skills, patient, proficient in Microsoft Word and office equipment."
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "studentId": "STU_DEMO_01",
+  "anonymousId": "STU_ANON_01",
+  "targetStandardId": "STD_P0_FROZEN_V1",
+  "rawText": "L001: [Profile] Alex Zhang | University Junior, E-Commerce Major\nL002: [Target Role] AI Application Product Manager Intern\nL003: \nL004: [Personal Project] Campus Lost & Found LLM Q&A Bot (2025.09 - 2025.11)\nL005: 1. Identified pain point of fragmented lost & found notices on campus forums; built automated Q&A WeChat bot.\nL006: 2. Authored structured extraction prompt parsing item type, lost location, time, and distinctive features from forum posts.\nL007: 3. Tested prompt across 120 historical lost-and-found posts; identified recurring location extraction errors.\nL008: 4. Added campus building alias lookup dictionary as few-shot constraints into prompt, improving extraction accuracy.\nL009: 5. Limitation: Did not build automated test script; manually verified 30 sample responses to evaluate accuracy.\nL010: \nL011: [Skills]\nL012: - Proficient with ChatGPT, Claude, and Kimi; experienced with system prompt engineering.\nL013: - Basic Python scripting for web scraping and text cleaning.",
+  "expectedDiagnosis": [
+    {
+      "requirementCode": "AIPM-AP1",
+      "requirementName": "Prompt Engineering & Constraints",
+      "evidenceStatus": "SUPPORTED",
+      "level": "PROFICIENT",
+      "lineIds": ["L006", "L008"],
+      "reasons": "Constructed structured extraction prompts and injected campus alias dictionaries to constrain output."
+    },
+    {
+      "requirementCode": "AIPM-AP2",
+      "requirementName": "Badcase Curation & Analysis",
+      "evidenceStatus": "PARTIAL",
+      "level": null,
+      "lineIds": ["L007"],
+      "reasons": "Identified location errors on 120 samples, but lacked systematic taxonomy or root cause categorization."
+    },
+    {
+      "requirementCode": "AIPM-AP4",
+      "requirementName": "Quantitative Metric Evaluation",
+      "evidenceStatus": "MATERIAL_INSUFFICIENT",
+      "level": null,
+      "lineIds": ["L009"],
+      "reasons": "Applicant candidly noted manual check of only 30 samples; lacks formal evaluation harness."
+    },
+    {
+      "requirementCode": "AIPM-AP3",
+      "requirementName": "Model Fine-Tuning & CUDA Algorithms",
+      "evidenceStatus": "NO_EVIDENCE",
+      "level": null,
+      "lineIds": [],
+      "reasons": "No mentions of model fine-tuning; null competence applied with zero penalty."
+    }
+  ],
+  "expectedInterviewQuestions": [
+    "In your Lost & Found bot, you manually inspected 30 samples. If scaling to 5,000 inquiries, how would you design an automated evaluation metric like Precision or Recall?",
+    "When you identified recurring location extraction errors, what steps did you take to categorize and debug the root causes?",
+    "How did you evaluate whether the building alias dictionary covered rare or informal campus nicknames?"
+  ]
+}
