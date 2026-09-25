@@ -117,7 +117,9 @@ export class CandidateService {
       const hasCoreSupported = assessments.some(
         a => (a.requirementCode === "AIPM-AP4" || a.requirementCode === "AIPM-AP1") && a.evidenceStatus === EvidenceState.SUPPORTED
       );
-      const hasOverestimationAlert = assessments.some(a => a.reasons.includes("CONTRIBUTION_UNCLEAR"));
+      const hasOverestimationAlert = assessments.some(
+        a => a.reasons.includes("CONTRIBUTION_UNCLEAR") || a.ruleIds.includes("R-08")
+      );
 
       let triageCategory: ReviewTriageCategory = "NOT_SUPPORTED";
       let triageReason = "";

@@ -16,9 +16,10 @@ export class SqliteClient {
     }
 
     this.db = new DatabaseSync(targetPath);
-    // Enable WAL mode & foreign keys
+    // Enable WAL mode & foreign keys & busy timeout for concurrent threads
     this.db.exec("PRAGMA journal_mode = WAL;");
     this.db.exec("PRAGMA foreign_keys = ON;");
+    this.db.exec("PRAGMA busy_timeout = 5000;");
 
     this.initSchema();
   }

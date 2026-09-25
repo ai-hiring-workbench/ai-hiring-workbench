@@ -113,7 +113,7 @@ export const ReviewDecisionSchema = z.object({
 // ==========================================
 export const StudentDiagnosisRequestSchema = z.object({
   studentId: z.string().optional(),
-  standardVersionId: z.string().min(1, "Must diagnose against a published frozen standard"),
+  standardVersionId: z.string().optional(),
   rawResumeText: z.string().min(20, "Resume text must be at least 20 characters"),
   consentGiven: z.boolean().refine(val => val === true, {
     message: "Candidate consent is required to process diagnostic materials"

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { FastifyInstance } from "fastify";
 import { buildApp } from "../../src/server.js";
 import { MockAdapter } from "../../src/adapters/mock-adapter.js";
+import { StandardRepository } from "../../src/infra/repositories/standard-repo.js";
 
 describe("Fastify REST API Routes End-to-End", () => {
   let app: FastifyInstance;
@@ -9,6 +10,36 @@ describe("Fastify REST API Routes End-to-End", () => {
   beforeAll(async () => {
     app = buildApp(new MockAdapter());
     await app.ready();
+
+    const stdRepo = new StandardRepository();
+    stdRepo.saveStandard({
+      id: "STD_DEFAULT_FROZEN",
+      version: 1,
+      status: "FROZEN",
+      roleName: "Junior AI PM",
+      department: "AI Incubation",
+      hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      confirmedBy: "LEAD_SYS",
+      frozenAt: new Date().toISOString(),
+      requirements: [
+        {
+          id: "REQ_AIPM_01",
+          code: "AIPM-AP1",
+          name: "Prompt Engineering & In-Context Constraint Design",
+          definition: "Authored structured system prompts.",
+          evidenceRequired: "Candidate materials must show authored prompt templates.",
+          status: "CONFIRMED"
+        },
+        {
+          id: "REQ_AIPM_04",
+          code: "AIPM-AP4",
+          name: "Quantitative Metric Evaluation & Iteration",
+          definition: "Designing gold evaluation scorecards.",
+          evidenceRequired: "Verifiable comparative scores or benchmark datasets.",
+          status: "CONFIRMED"
+        }
+      ]
+    });
   });
 
   afterAll(async () => {

@@ -90,19 +90,26 @@ export function enforceRuleR07_NullCompetencyLevel(assessment: RequirementAssess
 // R-08: Team accomplishments without individual task attribution cannot satisfy individual competency
 export function validateRuleR08_AntiOverestimationAttribution(assessment: RequirementAssessment, rawQuote: string): RequirementAssessment {
   // If text mentions "our team", "led department", "we achieved" but lacks personal actions ("I did", "built", "authored", "labeled")
-  const teamIndicators = ["our team", "we drove", "company achieved", "ecosystem led", "千万级", "百亿级"];
+  const teamIndicators = [
+    "our team", "led global team", "global team", "led team", "team",
+    "we drove", "company achieved", "ecosystem led", "ecosystem", "empowering", "千万级", "百亿级"
+  ];
   const personalIndicators = ["i authored", "i built", "i labeled", "designed", "curated", "wrote", "tested", "独立", "负责", "编写"];
   
   const lowerQuote = rawQuote.toLowerCase();
   const hasTeam = teamIndicators.some(t => lowerQuote.includes(t));
   const hasPersonal = personalIndicators.some(p => lowerQuote.includes(p));
 
-  if (hasTeam && !hasPersonal && assessment.evidenceStatus === EvidenceState.SUPPORTED) {
+  if (hasTeam && !hasPersonal) {
+    const reasons = assessment.reasons.includes("CONTRIBUTION_UNCLEAR")
+      ? assessment.reasons
+      : `${assessment.reasons} [CONTRIBUTION_UNCLEAR: Macro team claim lacks verified individual task deliverable.]`;
     return {
       ...assessment,
       evidenceStatus: EvidenceState.PARTIAL,
       level: null,
-      reasons: `${assessment.reasons} [CONTRIBUTION_UNCLEAR: Macro team claim lacks verified individual task deliverable.]`
+      reasons,
+      ruleIds: assessment.ruleIds.includes("R-08") ? assessment.ruleIds : [...assessment.ruleIds, "R-08"]
     };
   }
   return assessment;

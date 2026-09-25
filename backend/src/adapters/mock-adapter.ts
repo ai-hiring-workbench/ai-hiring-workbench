@@ -236,6 +236,33 @@ export class MockAdapter implements ModelAdapter {
       };
     }
 
+    // Case 2.5: Student diagnostic material (STU_ or prompt engineering post)
+    if (textJoined.includes("Authored structured extraction prompt") || candidateId.startsWith("STU_")) {
+      return {
+        taskRecords: [
+          {
+            id: `TR_${candidateId}_1`,
+            action: "Authored and tested",
+            object: "Structured extraction prompt with alias dictionary",
+            deliverable: "JSON extraction prompt template",
+            metric: "Tested on 120 posts, verified 30 sample responses",
+            anchorIds: ["L006", "L007"]
+          }
+        ],
+        projectEpisodes: [
+          {
+            id: `PE_${candidateId}_1`,
+            problem: "Unstructured entity extraction inconsistencies in user posts",
+            personalAction: "Authored structured extraction prompt with building alias dictionary and verified outputs",
+            artifact: "Prompt template and alias dictionary",
+            validation: "Tested on 120 posts; verified 30 sample responses",
+            iteration: "Iterated prompt structure based on 30 verified samples",
+            anchorIds: ["L006", "L007", "L009"]
+          }
+        ]
+      };
+    }
+
     // Case 3: Qualified candidate (CAND_QUALIFIED_03)
     if (textJoined.includes("400 domain QA pairs") || textJoined.includes("CAND_QUALIFIED_03")) {
       return {
@@ -333,10 +360,47 @@ export class MockAdapter implements ModelAdapter {
         requirementCode: req.code,
         evidenceStatus: EvidenceState.PARTIAL,
         level: null,
-        reasons: "High-level buzzwords found without isolated personal task execution (Rule R-08).",
+        reasons: "High-level buzzwords found without isolated personal task execution (Rule R-08). [CONTRIBUTION_UNCLEAR: Macro team claim lacks verified individual task deliverable.]",
         ruleIds: ["R-07", "R-08"],
         anchorIds: ["L005", "L007"]
       }));
+    }
+
+    // Student material or Authored structured extraction prompt
+    if (textJoined.includes("Authored structured extraction prompt") || candidateId.startsWith("STU_")) {
+      return requirements.map(req => {
+        if (req.code === "AIPM-AP1") {
+          return {
+            requirementId: req.id,
+            requirementCode: req.code,
+            evidenceStatus: EvidenceState.SUPPORTED,
+            level: "PROFICIENT",
+            reasons: "Authored structured extraction prompt with alias dictionary constraints.",
+            ruleIds: ["R-02", "R-03"],
+            anchorIds: ["L006", "L007"]
+          };
+        }
+        if (req.code === "AIPM-AP4") {
+          return {
+            requirementId: req.id,
+            requirementCode: req.code,
+            evidenceStatus: EvidenceState.PARTIAL,
+            level: null,
+            reasons: "Tested on 120 posts and verified 30 responses; lacks standardized gold evaluation scorecard.",
+            ruleIds: ["R-07"],
+            anchorIds: ["L007", "L009"]
+          };
+        }
+        return {
+          requirementId: req.id,
+          requirementCode: req.code,
+          evidenceStatus: EvidenceState.NO_EVIDENCE,
+          level: null,
+          reasons: "No direct evidence provided for this requirement.",
+          ruleIds: ["R-07"],
+          anchorIds: []
+        };
+      });
     }
 
     // Qualified candidate
