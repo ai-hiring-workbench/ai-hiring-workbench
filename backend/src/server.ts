@@ -21,8 +21,14 @@ import { studentRoutes } from "./routes/student-routes.js";
 import { decisionRoutes } from "./routes/decision-routes.js";
 import { RuleViolationError, sanitizeRuleR14_RedactPII } from "./domain/rules.js";
 
-// Load environment variables
-config();
+import { existsSync } from "node:fs";
+
+// Load environment variables (.env.local takes priority over .env)
+if (existsSync(".env.local")) {
+  config({ path: ".env.local" });
+} else {
+  config();
+}
 
 export function buildApp(customAdapter?: ModelAdapter): FastifyInstance {
   const app = fastify({

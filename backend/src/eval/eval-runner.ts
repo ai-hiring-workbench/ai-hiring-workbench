@@ -9,11 +9,21 @@ import { StudentService } from "../services/student-service.js";
 import { evaluateEhrMetrics } from "./e-hr-metrics.js";
 import { evaluateEstuMetrics } from "./e-stu-metrics.js";
 import { EvidenceState } from "../domain/evidence-states.js";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { config } from "dotenv";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Load environment variables (.env.local takes priority over .env)
+const envLocalPath = join(__dirname, "../../.env.local");
+if (existsSync(envLocalPath)) {
+  config({ path: envLocalPath });
+} else {
+  config();
+}
+
 const candidateBatchFixture = JSON.parse(readFileSync(join(__dirname, "../../fixtures/candidate-batch.json"), "utf8"));
 const studentMaterialFixture = JSON.parse(readFileSync(join(__dirname, "../../fixtures/student-material.json"), "utf8"));
 
