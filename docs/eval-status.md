@@ -3,7 +3,7 @@
 ## Current state
 
 Eval contract: **defined**  
-Mock contract check: **available**  
+Mock contract check: **not implemented**  
 Authorized real dataset: **missing**  
 Independent human Gold: **missing**  
 Frozen holdout run: **not run**  
@@ -18,7 +18,7 @@ Measured product effect: **unknown**
 - keyword baseline, general LLM + rubric baseline, and full mechanism;
 - separate HR and student metric reports.
 
-## Never claim from the current scaffold
+## Never claim from the current repository framework
 
 - improved recall;
 - reduced screening time;

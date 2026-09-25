@@ -19,15 +19,15 @@ enterprise task + source pack
 
 The AI does not make these decisions.
 
-## Layers
+## Planned layers
 
 1. HR and student interfaces.
-2. Fastify API and Zod contracts.
+2. API and structured-data contracts; the concrete framework is confirmed by the backend owner before implementation.
 3. Parsing, line indexing, and document hashing.
 4. Version and workflow state.
 5. Configurable model adapter and bounded AI modules.
 6. Deterministic safety rules.
-7. SQLite version store and offline Eval.
+7. Version store and offline Eval; the concrete database is confirmed by the backend owner before implementation.
 
 ## P0 boundaries
 

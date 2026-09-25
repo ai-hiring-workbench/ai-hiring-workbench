@@ -1,110 +1,56 @@
 # AI Hiring Workbench
 
-面向新兴岗位招聘的双端 AI 工作台仓库骨架。
+面向新兴岗位招聘的团队协作仓库。
 
-> 当前状态：**scaffold / contract implemented**。仓库已经包含可运行 API 骨架、Schema、确定性安全规则、SQLite DDL、Mock Eval 入口和 CI；尚未接入真实模型、真实招聘数据或执行正式 Eval。
+> 当前状态：**需求与技术方案阶段**。本仓库只提供分工目录、协作规则和设计文档，尚未提交产品实现代码，也尚未执行真实 Eval。
 
 ## 产品定义
 
-当企业准备招聘一个不熟悉或快速变化的岗位时，帮助 HR 和用人经理把模糊业务需求转成经过人工确认、来源可追溯的招聘标准，再用同一标准复核简历，找出可能被关键词筛选遗漏的候选人。
+当企业准备招聘一个不熟悉或快速变化的岗位时，帮助 HR 和用人经理把模糊业务需求转成一套经过人工确认、来源可追溯的招聘标准，再用这套标准复核简历，找出可能被关键词筛选遗漏的候选人。
 
-同一智能底座还提供学生端：学生选择已发布的冻结标准，上传本人材料，查看逐要求证据状态、材料缺口和面试准备问题。学生端不输出录取概率。
+项目同时包含学生端，但两端共用同一套证据模型和招聘标准，原始数据相互隔离。
 
-## 架构原则
-
-**Dual Experience, Single Intelligence Core｜双端体验、单一智能底座。**
-
-- HR 端生产、冻结并使用岗位标准；
-- 学生端只消费已发布的冻结标准；
-- 两端共用证据模型、AI 合同和安全规则；
-- 两端原始数据隔离；
-- AI 不冻结标准，也不决定面试、淘汰或录用。
-
-## 当前已经实现
-
-- Fastify 应用与健康检查；
-- API 路由骨架；
-- Zod 核心领域 Schema；
-- 文档行号和 SHA-256 标准化；
-- 引用、证据不足、冻结版本、学生端录取概率等安全规则；
-- SQLite Schema；
-- Mock Eval 清单；
-- Vitest 单元测试；
-- GitHub Actions CI。
-
-## 当前没有实现
-
-- 真实模型接入；
-- PDF／DOCX 解析；
-- 完整业务页面；
-- 真实 SQLite Repository；
-- 授权招聘数据和独立 Gold；
-- holdout 运行和效果指标；
-- 生产部署。
-
-## 快速开始
-
-```bash
-npm install
-copy .env.example .env
-npm run dev
-```
-
-访问：
-
-```text
-GET http://127.0.0.1:3000/health
-GET http://127.0.0.1:3000/api/v1/meta
-```
-
-运行检查：
-
-```bash
-npm run typecheck
-npm test
-npm run eval:mock
-```
-
-`npm run eval:holdout` 当前会主动失败，因为真实数据、Gold 和冻结配置尚不存在。这是预期行为。
-
-## 仓库结构
+## 团队目录
 
 ```text
 .
-├─ .github/workflows/ci.yml
-├─ data/
-│  ├─ public/
-│  └─ private/                 # Git 忽略，不提交真实候选人材料
-├─ docs/
-│  ├─ architecture.md
-│  ├─ api-contract.md
-│  └─ eval-status.md
-├─ eval/
-│  ├─ datasets/
-│  ├─ reports/
-│  └─ eval.ts
-├─ src/
-│  ├─ ai/
-│  ├─ api/routes/
-│  ├─ core/
-│  ├─ db/
-│  ├─ models/
-│  ├─ app.ts
-│  └─ index.ts
-└─ tests/
+├─ ai/          # 模型调用、Prompt、Schema 与 AI 模块
+├─ backend/     # 后端、数据库与 API 实现
+├─ data/        # 授权数据、脱敏规则与数据版本说明
+├─ design/      # 产品原型、交互说明与 Demo 素材
+├─ docs/        # 架构、API 合同与 Eval 状态文档
+├─ eval/        # 数据集清单、基线、指标和评测结果
+└─ frontend/    # HR 端与学生端前端实现
 ```
+
+每个实现目录目前只包含职责说明。负责人确定技术方案后，再在自己的分支中初始化代码。
+
+## 协作方式
+
+1. 从 `main` 创建个人功能分支；
+2. 一个任务对应一个 Issue 和一个分支；
+3. 完成后提交 Pull Request；
+4. 至少一名队友检查后再合并；
+5. 业务规则、字段和 Eval 口径变更必须同步更新 `docs/`；
+6. 不直接向 `main` 推送未评审的实现代码。
+
+详细要求见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 数据安全
 
-- 不要提交真实姓名、电话、邮箱、简历原文或企业内部资料；
+- 不提交真实姓名、电话、邮箱、原始简历或企业内部资料；
 - `data/private/` 默认被 Git 忽略；
-- 示例数据必须是获得授权并脱敏的数据，或明确标注的合成 Fixture；
-- 不要把 API Key 写入代码、测试和 Git 历史。
+- 示例材料只能使用授权脱敏数据或明确标记的合成数据；
+- API Key 只能通过本地环境变量管理，不能进入 Git 历史。
 
-## Eval 状态
+## 当前边界
 
-Eval 方法和接口已定义，但正式 Eval **尚未执行**。详见 [docs/eval-status.md](docs/eval-status.md)。
+- 产品与技术文档：已有初版，等待团队确认；
+- 前端、后端和 AI 代码：尚未开始；
+- 真实模型接入：尚未开始；
+- 真实数据与独立 Gold：尚未取得；
+- 正式 Eval：尚未执行。
 
 ## License
 
-当前仓库尚未选择开源许可证。在确认数据、代码和赛事提交策略前，不默认授予外部使用许可。
+当前仓库尚未选择开源许可证。在确认赛事提交和代码开放策略前，不默认授予外部使用许可。
