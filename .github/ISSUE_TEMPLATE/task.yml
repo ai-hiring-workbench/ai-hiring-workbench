@@ -1,0 +1,45 @@
+name: 开发任务
+description: 为可验收的产品、AI、数据、设计或工程工作建任务
+title: "[Task] "
+labels: []
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: 影响范围
+      options:
+        - HR 端
+        - 学生端
+        - 共享智能核心
+        - 数据 / Eval
+        - 工程 / 文档
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 要解决的问题
+      description: 描述用户、场景和当前阻塞，不要只写功能名。
+    validations:
+      required: true
+  - type: textarea
+    id: deliverable
+    attributes:
+      label: 交付物
+      description: 列出代码、数据、原型或文档的明确产物。
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收标准
+      description: 写成可以复现和判断通过/不通过的条件。
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 前置条件与数据边界
+      description: 说明依赖谁、需要什么真实数据，以及目前是否具备。
+    validations:
+      required: true
