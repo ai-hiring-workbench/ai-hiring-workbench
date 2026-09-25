@@ -5,7 +5,7 @@
 
 ---
 
-## 技术栈 / Tech Stack
+## 技术栈 / Tech Stack.
 
 * **Backend:** Fastify (Node.js) + TypeScript + Zod
 * **AI Engine:** DeepSeek (V3 & R1)
